@@ -209,17 +209,19 @@
   <section class="testimonials" id="testimonials">
     <div class="container">
       <h2>What educators say</h2>
-      <div class="testimonial-group">
-        <div class="testimonial-card">
-          <p class="testimonial-text">"I finally understand my options and feel confident about next steps."</p>
-          <p class="testimonial-role">5th Grade Teacher</p>
+      <div class="testimonial-carousel">
+        <button class="carousel-btn carousel-prev" aria-label="Previous testimonial">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="testimonial-track">
+          <!-- Testimonials loaded dynamically from reviews.json -->
         </div>
-        <div class="testimonial-card">
-          <p class="testimonial-text">"Clear, unbiased, and practical. Booking was easy."</p>
-          <p class="testimonial-role">High School Counselor</p>
-        </div>
+        <button class="carousel-btn carousel-next" aria-label="Next testimonial">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
-      <a href="schedule.html" class="btn btn-secondary">Read More Educator Stories</a>
+      <div class="carousel-dots"></div>
+      <a href="schedule.html" class="btn btn-secondary">Schedule Your Session</a>
     </div>
   </section>
 
@@ -460,6 +462,87 @@
     // Initialize calendar on page load
     if (document.getElementById('calendarGrid')) {
       renderCalendar();
+    }
+
+    // Testimonial Carousel
+    async function loadTestimonials() {
+      try {
+        const response = await fetch('/assets/data/reviews.json');
+        const data = await response.json();
+        
+        // Filter reviews with non-empty review_text
+        const reviews = data.reviews.filter(r => r.review_text && r.review_text.trim() !== '');
+        
+        const track = document.querySelector('.testimonial-track');
+        const dotsContainer = document.querySelector('.carousel-dots');
+        
+        reviews.forEach((review, index) => {
+          // Create testimonial card
+          const card = document.createElement('div');
+          card.className = 'testimonial-card';
+          card.innerHTML = `
+            <p class="testimonial-text">"${review.review_text}"</p>
+            <p class="testimonial-author">${review.reviewer}</p>
+            <p class="testimonial-role">${review.job_title}, ${review.state}</p>
+          `;
+          track.appendChild(card);
+          
+          // Create dot indicator
+          const dot = document.createElement('button');
+          dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
+          dot.addEventListener('click', () => goToSlide(index));
+          dotsContainer.appendChild(dot);
+        });
+        
+        initCarousel(reviews.length);
+      } catch (error) {
+        console.error('Failed to load testimonials:', error);
+      }
+    }
+
+    let currentSlide = 0;
+    let autoRotateInterval;
+
+    function initCarousel(totalSlides) {
+      document.querySelector('.carousel-prev').addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+      });
+      
+      document.querySelector('.carousel-next').addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+      });
+      
+      // Auto-rotate every 6 seconds
+      startAutoRotate(totalSlides);
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+    }
+
+    function updateCarousel() {
+      const track = document.querySelector('.testimonial-track');
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    function startAutoRotate(totalSlides) {
+      autoRotateInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+      }, 6000);
+    }
+
+    // Initialize on page load
+    if (document.querySelector('.testimonial-carousel')) {
+      loadTestimonials();
     }
 
   </script>
