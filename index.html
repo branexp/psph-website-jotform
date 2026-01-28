@@ -367,7 +367,9 @@
     document.querySelectorAll('.mobile-nav a').forEach(link => {
       link.addEventListener('click', () => {
         document.querySelector('.mobile-nav').classList.remove('active');
-        document.querySelector('.mobile-menu-btn').classList.remove('active');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        menuBtn.classList.remove('active');
+        menuBtn.setAttribute('aria-expanded', 'false');
       });
     });
 
@@ -473,6 +475,11 @@
         // Filter reviews with non-empty review_text
         const reviews = data.reviews.filter(r => r.review_text && r.review_text.trim() !== '');
         
+        if (reviews.length === 0) {
+          console.warn('No valid testimonials found');
+          return;
+        }
+        
         const track = document.querySelector('.testimonial-track');
         const dotsContainer = document.querySelector('.carousel-dots');
         
@@ -480,11 +487,23 @@
           // Create testimonial card
           const card = document.createElement('div');
           card.className = 'testimonial-card';
-          card.innerHTML = `
-            <p class="testimonial-text">"${review.review_text}"</p>
-            <p class="testimonial-author">${review.reviewer}</p>
-            <p class="testimonial-role">${review.job_title}, ${review.state}</p>
-          `;
+          
+          // Create elements safely using textContent to prevent XSS
+          const textP = document.createElement('p');
+          textP.className = 'testimonial-text';
+          textP.textContent = `"${review.review_text}"`;
+          
+          const authorP = document.createElement('p');
+          authorP.className = 'testimonial-author';
+          authorP.textContent = review.reviewer;
+          
+          const roleP = document.createElement('p');
+          roleP.className = 'testimonial-role';
+          roleP.textContent = `${review.job_title}, ${review.state}`;
+          
+          card.appendChild(textP);
+          card.appendChild(authorP);
+          card.appendChild(roleP);
           track.appendChild(card);
           
           // Create dot indicator
@@ -494,6 +513,10 @@
           dot.addEventListener('click', () => goToSlide(index));
           dotsContainer.appendChild(dot);
         });
+        
+        // Add aria-live for accessibility
+        track.setAttribute('aria-live', 'polite');
+        track.setAttribute('aria-atomic', 'true');
         
         initCarousel(reviews.length);
       } catch (error) {
@@ -508,11 +531,15 @@
       document.querySelector('.carousel-prev').addEventListener('click', () => {
         currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
         updateCarousel();
+        // Pause auto-rotation when user interacts
+        clearInterval(autoRotateInterval);
       });
       
       document.querySelector('.carousel-next').addEventListener('click', () => {
         currentSlide = (currentSlide + 1) % totalSlides;
         updateCarousel();
+        // Pause auto-rotation when user interacts
+        clearInterval(autoRotateInterval);
       });
       
       // Auto-rotate every 6 seconds
@@ -522,6 +549,8 @@
     function goToSlide(index) {
       currentSlide = index;
       updateCarousel();
+      // Pause auto-rotation when user interacts
+      clearInterval(autoRotateInterval);
     }
 
     function updateCarousel() {

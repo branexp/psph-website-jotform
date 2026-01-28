@@ -105,7 +105,9 @@
     document.querySelectorAll('.mobile-nav a').forEach(link => {
       link.addEventListener('click', () => {
         document.querySelector('.mobile-nav').classList.remove('active');
-        document.querySelector('.mobile-menu-btn').classList.remove('active');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        menuBtn.classList.remove('active');
+        menuBtn.setAttribute('aria-expanded', 'false');
       });
     });
   </script>
