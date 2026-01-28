@@ -104,13 +104,24 @@ p {
   font-weight: 500;
   font-family: var(--font-sans);
   transition: var(--transition);
+  border-bottom: 3px solid transparent;
+  padding-bottom: 2px;
 }
 
 .nav a:hover {
   color: var(--primary);
 }
 
+.nav a.active,
+.nav a[aria-current="page"] {
+  color: var(--primary);
+  font-weight: 700;
+  border-bottom-color: var(--accent);
+}
+
+/* CTA Button - Styled consistently with .btn-primary */
 .cta {
+  display: inline-block;
   background-color: var(--accent);
   color: var(--dark);
   padding: 0.75rem 1.5rem;
@@ -125,6 +136,17 @@ p {
   background-color: #E6B800;
   color: var(--dark);
   transform: translateY(-2px);
+}
+
+.cta.active,
+.cta[aria-current="page"] {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.cta.active:hover,
+.cta[aria-current="page"]:hover {
+  background-color: var(--secondary);
 }
 
 .mobile-menu-btn {
@@ -178,6 +200,15 @@ p {
   text-decoration: none;
   color: var(--dark);
   border-bottom: 1px solid var(--light-gray);
+  transition: var(--transition);
+}
+
+.mobile-nav a.active,
+.mobile-nav a[aria-current="page"] {
+  color: var(--primary);
+  font-weight: 700;
+  background-color: var(--primary-light);
+  border-left: 4px solid var(--accent);
 }
 
 .mobile-nav a:last-child {
