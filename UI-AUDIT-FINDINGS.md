@@ -124,9 +124,7 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 **Location:** Both `index.html` (lines 367-369) and `schedule.html` (lines 90-92)  
 **Issue:** All footer links have `href="#"` (Disclaimer, Privacy Policy, Terms of Service)  
 **Impact:** Legal compliance concerns, unprofessional appearance  
-**Recommendation:** 
-- Create actual policy pages or link to hosted versions
-- At minimum, remove dead links until pages are ready
+**Recommendation:** Create actual policy pages or link to hosted versions
 
 ```html
 <!-- Current (broken) -->
@@ -146,7 +144,7 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 4. "View All FAQs" (line 291) links to `#faqs` - same section
 
 **Impact:** Confusing user experience, links appear broken  
-**Recommendation:** Either create dedicated pages for these sections or remove the links
+**Recommendation:** create dedicated pages for these sections.
 
 ---
 
