@@ -25,9 +25,9 @@
   <!-- Header -->
   <header class="header">
     <div class="container">
-      <div class="brand">
-        <img src="/assets/img/psph-logo.svg" alt="PSPH" class="logo" />
-      </div>
+      <a href="/" class="brand">
+        <img src="/assets/img/psph-logo.svg" alt="PSPH - Return to homepage" class="logo" />
+      </a>
       <nav class="nav" aria-label="Primary">
         <a href="#how-it-works" class="active">How it works</a>
         <a href="#pension-basics">Pension Basics</a>
@@ -36,7 +36,7 @@
         <a href="#faqs">FAQs</a>
       </nav>
       <a href="schedule.html" class="cta">Schedule an Appointment</a>
-      <button class="mobile-menu-btn" aria-label="Toggle navigation">
+      <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
@@ -330,6 +330,8 @@
     document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
       document.querySelector('.mobile-nav').classList.toggle('active');
       this.classList.toggle('active');
+      const isExpanded = this.classList.contains('active');
+      this.setAttribute('aria-expanded', isExpanded);
     });
 
     // Active navigation highlighting
