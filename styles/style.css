@@ -104,17 +104,19 @@ p {
   font-weight: 500;
   font-family: var(--font-sans);
   transition: var(--transition);
+  border-bottom: 3px solid transparent;
+  padding-bottom: 2px;
 }
 
 .nav a:hover {
   color: var(--primary);
 }
 
-.nav a.active {
+.nav a.active,
+.nav a[aria-current="page"] {
   color: var(--primary);
   font-weight: 700;
-  border-bottom: 3px solid var(--accent);
-  padding-bottom: 2px;
+  border-bottom-color: var(--accent);
 }
 
 /* CTA Button - Styled consistently with .btn-primary */
@@ -134,6 +136,17 @@ p {
   background-color: #E6B800;
   color: var(--dark);
   transform: translateY(-2px);
+}
+
+.cta.active,
+.cta[aria-current="page"] {
+  background-color: var(--primary);
+  color: var(--white);
+}
+
+.cta.active:hover,
+.cta[aria-current="page"]:hover {
+  background-color: var(--secondary);
 }
 
 .mobile-menu-btn {
@@ -190,7 +203,8 @@ p {
   transition: var(--transition);
 }
 
-.mobile-nav a.active {
+.mobile-nav a.active,
+.mobile-nav a[aria-current="page"] {
   color: var(--primary);
   font-weight: 700;
   background-color: var(--primary-light);
