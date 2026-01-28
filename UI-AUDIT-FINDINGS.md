@@ -10,9 +10,9 @@
 ## ✅ Fixed Issues Summary
 
 **All 4 Critical Issues Fixed (January 28, 2026):**
-1. ✅ **Duplicate CSS Styles** - Removed 898 lines of duplicate/conflicting CSS rules
+1. ✅ **Duplicate CSS Styles** - Removed 618 lines of duplicate/conflicting CSS rules, restored essential section styles
 2. ✅ **Outdated Calendar** - Implemented dynamic calendar showing current month
-3. ✅ **Non-Functional Calendar** - Added navigation buttons and clickable dates
+3. ✅ **Non-Functional Calendar** - Added navigation buttons and clickable dates with full accessibility
 4. ✅ **Placeholder Phone** - Updated to real contact number (603) 960-4295
 
 **Impact:** Website now displays consistent branding, current information, and functional calendar interactions. All critical credibility issues resolved.
@@ -57,8 +57,9 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 
 **Fix Implemented (Jan 28, 2026):**
 - Removed duplicate CSS rules (lines 618-1516)
-- File reduced from 1515 lines to 617 lines
+- File reduced from 1515 lines to 897 lines (after restoring necessary section styles)
 - Only correct brand colors (--primary: #002169, --accent: #FFCD00) remain
+- Restored essential section-specific styles (calendar, how-it-works, contact-us)
 - Verified consistent styling across all pages
 
 ---
@@ -92,10 +93,14 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 **Fix Implemented (Jan 28, 2026):**
 - Added event listeners to prev/next month buttons (IDs: `prevMonth`, `nextMonth`)
 - Buttons now navigate between months using `currentDate.setMonth()`
+- Added `type="button"` and `aria-label` attributes for accessibility
 - Available dates (weekdays) are now clickable and navigate to `schedule.html`
 - Calendar intelligently marks weekdays (Mon-Fri) after today as "available"
-- Clicking any available date redirects user to scheduling form
-- Weekend dates and past dates are not clickable
+- Implemented full keyboard accessibility with `tabindex="0"`, `role="button"`, and Enter/Space key handlers
+- Added descriptive `aria-label` to each available date (e.g., "Schedule an appointment on January 15, 2026")
+- Clicking or pressing Enter/Space on any available date redirects user to scheduling form
+- Weekend dates and past dates are not clickable or keyboard-focusable
+- Added `<noscript>` fallback message with link to schedule page for users without JavaScript
 - Smooth user journey from browsing availability to booking appointment
 
 ---
