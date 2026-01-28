@@ -22,11 +22,7 @@
   <meta name="msapplication-TileColor" content="#002169">
 
   <!-- Theme / page styles -->
-  <link rel="stylesheet" href="/styles/schedule-style.css" />
-
-  <!-- Preload local datasets for autocomplete -->
-  <link rel="preload" as="fetch" href="/assets/data/districts.json" crossorigin="anonymous" />
-  <link rel="preload" as="fetch" href="/assets/data/schools.json" crossorigin="anonymous" />
+  <link rel="stylesheet" href="/styles/style.css" />
 </head>
 <body>
 
@@ -61,102 +57,45 @@
     <a href="schedule.html">Schedule an Appointment</a>
   </div>
 
-  <main id="main" class="container" role="main">
-    <div class="form-wrapper">
-      <!-- Title and subtitle -->
-      <div class="form-title-section">
-        <h1 class="form-title">Welcome to the Appointment Center!</h1>
-        <p class="form-subtitle">In a complimentary one-on-one session, we'll cut through the complexity to give you the clarity and confidence you need.</p>
+  <main id="main" class="site-main" role="main">
+    <div class="container">
+      <div class="form-wrapper">
+        <!-- Title and subtitle -->
+        <div class="form-title-section">
+          <h1 class="form-title">Welcome to the Appointment Center!</h1>
+          <p class="form-subtitle">In a complimentary one-on-one session, we'll cut through the complexity to give you the clarity and confidence you need.</p>
+        </div>
+
+        <!-- JotForm Embed -->
+        <script
+          type="text/javascript"
+          src="https://form.jotform.com/jsform/251803846453157"
+        ></script>
+
+        <noscript>
+          <p class="noscript-text">
+            JavaScript is disabled in your browser. Please enable JavaScript to view and submit this form.
+          </p>
+        </noscript>
       </div>
-
-      <!-- Keep ids/names exactly the same for backend/JS compatibility -->
-      <form id="appointment-form" action="send-email.php" method="POST" novalidate class="appointment-form">        <!-- Name Fields in one row -->
-        <div class="form-row">
-          <div class="form-field">
-            <label for="first-name">Full Name <span class="required">*</span></label>
-            <input type="text" id="first-name" name="firstName" required placeholder="First Name" />
-          </div>
-          <div class="form-field">
-            <label for="last-name">&nbsp;</label>
-            <input type="text" id="last-name" name="lastName" required placeholder="Last Name" />
-          </div>
-        </div>
-
-        <!-- District and School in one row -->
-        <div class="form-row">
-          <div class="form-field">
-            <label for="school-district">District <span class="required">*</span></label>
-            <input type="text" id="school-district" name="schoolDistrict" required autocomplete="off" placeholder="Your School District" />
-            <div id="district-suggestions" class="suggestions-list" hidden></div>
-          </div>
-          <div class="form-field">
-            <label for="school">School <span class="required">*</span></label>
-            <input type="text" id="school" name="school" required autocomplete="off" placeholder="Your School Name" />
-            <div id="school-suggestions" class="suggestions-list" hidden></div>
-          </div>
-        </div>
-
-        <!-- Contact and Email in one row -->
-        <div class="form-row">
-          <div class="form-field">
-            <label for="phone">Contact Number <span class="required">*</span></label>
-            <input type="tel" id="phone" name="phone" required placeholder="(000) 000-0000" />
-          </div>
-          <div class="form-field">
-            <label for="email">Email Address <span class="required">*</span></label>
-            <input type="email" id="email" name="email" required placeholder="johndoe@example.com" />
-          </div>
-        </div>
-
-        <!-- Topic Selection -->
-        <div class="form-section">
-          <label class="section-label">To help us prepare for our meeting, please select the topics you are most interested in discussing. (Please select 1-2 that are most important to you right now.) <span class="required">*</span></label>
-          
-          <div class="checkbox-group">
-            <label class="checkbox-item">
-              <input type="checkbox" name="topic" value="Understanding Your Pension" />
-              <span class="checkbox-text">Understanding Your Pension</span>
-            </label>
-            
-            <label class="checkbox-item">
-              <input type="checkbox" name="topic" value="Your Supplemental Retirement Accounts (403(b) / 457(b))" />
-              <span class="checkbox-text">Your Supplemental Retirement Accounts (403(b) / 457(b))</span>
-            </label>
-            
-            <label class="checkbox-item">
-              <input type="checkbox" name="topic" value="General Financial Health" />
-              <span class="checkbox-text">General Financial Health</span>
-            </label>
-            
-            <label class="checkbox-item">
-              <input type="checkbox" name="topic" value="Risk Management & Estate Planning" />
-              <span class="checkbox-text">Risk Management & Estate Planning</span>
-            </label>
-            
-            <label class="checkbox-item">
-              <input type="checkbox" id="other" name="topic" value="Other" />
-              <span class="checkbox-text">Other / My question isn't listed here</span>
-            </label>
-          </div>
-
-          <input type="text" id="other-topic-input" name="otherTopic" placeholder="Please specify your question" style="display: none; margin-top: 10px; width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px;" />
-        </div>        <!-- Date/Time Selection -->
-        <div class="form-section">
-          <label class="section-label">What date and time works best for you? <span class="required">*</span></label>
-          <div class="datetime-row">
-            <input type="datetime-local" id="appointment-time" name="appointment" required />
-          </div>
-        </div>
-
-        <!-- Submit Button -->
-        <div class="form-actions">
-          <button type="submit" class="btn-submit">Submit</button>
-        </div>
-      </form>
     </div>
   </main>
 
-  <script src="/scripts/schedule-script.js"></script>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-brand">PSPH</div>
+        <div class="footer-links">
+          <a href="#">Disclaimer</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer-copyright">© PSPH. All rights reserved.</div>
+    </div>
+  </footer>
+
   <script>
     // Mobile menu toggle
     document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
