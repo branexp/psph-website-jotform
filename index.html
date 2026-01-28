@@ -318,10 +318,10 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">PSPH</div>
-      </div>
-      <div class="footer-copyright">© PSPH. All rights reserved.</div>
+      <p class="footer-disclaimer">
+        Public School Pension Help (PSPH) helps public employees better understand their pension and retirement options by connecting them with qualified, independent service professionals. PSPH is a coordinating service and is not affiliated with any school district, union, or pension system.
+      </p>
+      <p class="footer-copyright">© 2026 Public School Pension Help. All rights reserved.</p>
     </div>
   </footer>
 
@@ -421,9 +421,9 @@
           cell.classList.add('today');
         }
         
-        // Mark weekdays (Mon-Fri) as available if they're in the future
+        // Mark weekdays (Mon-Sat) as available if they're in the future
         const dayOfWeek = cellDate.getDay();
-        if (cellDate > today && dayOfWeek >= 1 && dayOfWeek <= 5) {
+        if (cellDate > today && dayOfWeek >= 1 && dayOfWeek <= 6) {
           cell.classList.add('available');
           cell.setAttribute('tabindex', '0');
           cell.setAttribute('role', 'button');
