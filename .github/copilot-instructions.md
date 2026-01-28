@@ -2,24 +2,25 @@
 
 ## Project Overview
 
-Static marketing website for **Public School Pension Help (PSPH)** — a service providing K-12 educators with pension guidance. The site is migrating from a custom PHP scheduler to an embedded JotForm solution.
+Static marketing website for **Public School Pension Help (PSPH)** — pension guidance for K-12 educators. No build process; files served directly via Apache.
 
-**Key pages:**
-- [index.html](../index.html) — Landing page with sections: hero, how-it-works, testimonials, FAQs
-- [schedule.html](../schedule.html) — Appointment scheduling (JotForm embed in progress)
+**Production URL:** `https://psph.org` (enforced via `.htaccess` canonical redirects)
 
-## Architecture & Migration Context
+## Architecture
 
-This site is undergoing a **JotForm migration** documented in [MIGRATION_JOTFORM.md](../MIGRATION_JOTFORM.md). The old PHP/JS scheduler is being replaced with JotForm form ID `251803846453157`.
+| File | Purpose |
+|------|---------|
+| `index.html` | Landing page: hero, how-it-works, testimonials, FAQs, dynamic calendar |
+| `schedule.html` | JotForm embed (form ID: `251803846453157`) |
+| `styles/style.css` | Single CSS file with design tokens in `:root` |
+| `.htaccess` | URL rewrites (clean URLs), security headers, HTTPS enforcement |
+| `tools/parser.html` | Internal utility for CSV→JSON district/school extraction |
 
-**Current state:**
-- Form fields still exist in `schedule.html` but will be replaced by JotForm script embed
-- Backend files (`send-email.php`, `src/PHPMailer`) have been removed
-- JSON data files in `assets/data/` are empty placeholders (district/school data moved to JotForm)
+**JotForm Integration:** Scheduling uses an embedded JotForm script—do NOT add custom form validation, PHP, or backend logic. JotForm handles validation, notifications, and spam protection.
 
 ## CSS Design System
 
-All styling uses CSS custom properties defined in [styles/style.css](../styles/style.css):
+All styling uses CSS custom properties in [styles/style.css](../styles/style.css):
 
 ```css
 --primary: #002169;        /* Navy blue - headers, brand */
@@ -29,50 +30,56 @@ All styling uses CSS custom properties defined in [styles/style.css](../styles/s
 --font-sans: 'Merriweather Sans' /* Navigation, buttons */
 ```
 
-**Button conventions:**
-- `.btn-primary` — Yellow accent background
-- `.btn-secondary` — Outline style
-- `.cta` — Header call-to-action (yellow)
+**Critical:** Never duplicate `:root` declarations—this caused a prior bug ([UI-AUDIT-FINDINGS.md](../UI-AUDIT-FINDINGS.md)).
 
-## File Structure Conventions
+**Button classes:** `.btn-primary` (yellow), `.btn-secondary` (outline), `.cta` (header CTA)
 
-| Directory | Purpose |
-|-----------|---------|
-| `assets/data/` | JSON data files (reviews, districts, schools) |
-| `assets/img/` | Favicons, logos, manifest |
-| `styles/` | CSS stylesheets (main: `style.css`) |
-| `tools/` | Internal utilities (CSV parser for data extraction) |
+## Key Patterns
 
-## Testimonials Data
+**Dynamic Calendar (index.html):** JavaScript generates calendar grid in `#calendarGrid`. Weekdays in the future get `.available` class and link to schedule page. Avoid static date markup.
 
-Reviews are stored in [assets/data/reviews.json](../assets/data/reviews.json) with this structure:
+**Mobile Navigation:** Toggle via `.mobile-menu-btn` → `.mobile-nav.active`. Both navs must have identical link order and destinations.
+
+**Active State Convention:** 
+- Nav links: `.active` or `aria-current="page"`
+- CTA button on current page: `.cta.active` (inverts to primary/white)
+
+## Data Files
+
+| File | Purpose |
+|------|---------|
+| `assets/data/reviews.json` | Testimonials displayed on homepage |
+| `assets/img/` | Favicons (SVG primary), logos, PWA manifest |
+
+**reviews.json structure:**
 ```json
 {
-  "reviewer": "Name",
-  "review_text": "...",
-  "state": "New Hampshire",
-  "school_district": "...",
-  "job_title": "High School Teacher"
+  "reviews": [
+    {
+      "reviewer": "Jonathan",           // First name only (privacy)
+      "time_posted": "4 months ago",    // Relative time string
+      "review_text": "Full testimonial text...",
+      "state": "New Hampshire",         // Used for geographic relevance
+      "school_district": "Nashua School District",
+      "job_title": "High School Mathematics Teacher"
+    }
+  ]
 }
 ```
+Reviews are wrapped in a `reviews` array. When adding new testimonials, include all fields—`state` and `school_district` help visitors identify educators in similar roles.
 
-## Development Notes
+## External Dependencies
 
-- **No build process** — Static HTML/CSS/JS served directly
-- **External CDNs used:** Font Awesome 6.4.0, Google Fonts
-- **Mobile navigation:** Toggle via `.mobile-menu-btn` → `.mobile-nav.active`
-- **Parser tool:** [tools/parser.html](../tools/parser.html) uses PapaParse to extract unique names from CSV files for district/school data
+- **Google Fonts:** Merriweather, Merriweather Sans (preconnect to `fonts.googleapis.com`)
+- **Font Awesome 6.4.0:** CDN via `cdnjs.cloudflare.com`
+- **JotForm:** Embedded via `form.jotform.com/jsform/251803846453157`
 
-## When Modifying Forms
+## URL Structure
 
-The scheduling form is transitioning to JotForm. Do NOT add custom form validation or PHP processing. The embed will handle:
-- Field validation
-- Email notifications (autoresponder + admin)
-- Thank-you page display
-- Spam protection
+`.htaccess` enforces clean URLs—link to `/schedule` not `/schedule.html`. Test links work with and without trailing slash.
 
 ## Brand Voice
 
 - Friendly, trustworthy tone for K-12 educators
-- Emphasize: "independent & conflict-free", "privacy first"
-- Action-oriented CTAs: "Schedule an Appointment", "Learn About Your Pension"
+- Key phrases: "independent & conflict-free", "privacy first", "no products, no commissions"
+- CTAs: "Schedule an Appointment", "Learn About Your Pension"
