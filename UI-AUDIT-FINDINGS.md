@@ -46,10 +46,7 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 **Location:** `index.html` - Calendar section (lines 112-177)  
 **Issue:** Static calendar shows "October 2023" which is 27+ months outdated  
 **Impact:** Damages credibility, suggests website is unmaintained  
-**Recommendation:** 
-- Since migrating to JotForm, consider removing static calendar entirely
-- OR update to current month dynamically with JavaScript
-- OR replace with simplified "View Available Times" CTA only
+**Recommendation:** Update to current month dynamically with JavaScript
 
 ---
 
@@ -61,7 +58,7 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 - No integration with actual scheduling system
 
 **Impact:** Creates user frustration, broken user journey  
-**Recommendation:** Remove calendar display entirely since JotForm handles scheduling, or implement proper calendar functionality
+**Recommendation:** Have the calendar bring users to the scheduling form.
 
 ---
 
@@ -69,7 +66,7 @@ This audit identified **16 UI/UX issues** across the PSPH website, ranging from 
 **Location:** `index.html` - Contact Us section (line 339)  
 **Issue:** Phone number displays as "(555) 123-4567" - a universally recognized placeholder  
 **Impact:** Users cannot actually contact the business, appears unprofessional  
-**Recommendation:** Replace with real phone number or remove phone contact option
+**Recommendation:** Replace with (603) 960-4295
 
 ---
 
