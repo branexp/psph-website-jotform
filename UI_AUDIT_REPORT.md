@@ -491,7 +491,7 @@ This comprehensive UI audit evaluates the PSPH website across multiple dimension
 
 4. **Reviews.json Loading**
    - **Severity:** Low
-   - **Issue:** Loads all 26 reviews even though only one shows at a time
+   - **Issue:** Loads all 27 reviews even though only one shows at a time
    - **File size:** ~8KB (acceptable)
    - **Recommendation:** Current implementation is fine; consider pagination only if reviews exceed 50+
 
