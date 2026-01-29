@@ -185,7 +185,7 @@ This comprehensive UI audit evaluates the PSPH website across multiple dimension
 
 - **Sticky Header**: Header remains visible on scroll for easy navigation
 - **Clear CTAs**: Multiple "Schedule an Appointment" CTAs throughout the page
-- **Anchor Links**: Smooth navigation to sections via hash links
+- **Anchor Links**: Direct navigation to sections via hash links (smooth scrolling can be added as an optional enhancement)
 - **Active State Indication**: Yellow underline shows active nav item
 
 ### ⚠️ Issues Identified
