@@ -4,102 +4,106 @@
 
 Static marketing website for **Public School Pension Help (PSPH)** — pension guidance for K-12 educators. No build process; files served directly via Apache on `https://psph.org`.
 
-## Architecture
+**Critical:** JotForm handles all form logic (form ID: `251803846453157`)—never add custom validation, PHP, or backend code.
 
-| File | Purpose |
-|------|---------|
-| `index.html` | Landing page with hero, how-it-works, testimonials carousel, FAQs, dynamic calendar |
-| `schedule.html` | JotForm embed (form ID: `251803846453157`) for appointment booking |
-| `styles/style.css` | Single CSS file with design tokens in `:root` |
-| `.htaccess` | Clean URLs, HTTPS/canonical enforcement, CSP headers |
+## File Structure
 
-**Critical:** JotForm handles all form logic—never add custom validation, PHP, or backend code.
+```
+index.html              # Landing: hero, how-it-works, calendar, testimonials, FAQs
+schedule.html           # JotForm embed for appointment booking
+privacy.html, terms.html # Legal pages with .legal-content section
+styles/style.css        # Single CSS file with design tokens in :root
+scripts/main.js         # IIFE module: mobile nav, calendar, carousel, JotForm loading
+assets/data/reviews.json # Testimonial data (first name, state, job_title, review_text)
+assets/img/             # SVG logos, favicons, placeholder graphics
+.htaccess               # Clean URLs, HTTPS enforcement, CSP headers
+```
+
+## Developer Workflow
+
+**Local testing:** Serve with any static server (e.g., `npx serve` or VS Code Live Server). Test CSP by checking browser console for violations.
+
+**Adding pages:** Copy header/footer structure from `privacy.html`. Update both `.nav` and `.mobile-nav` links to match. Use clean URL format in links (`/schedule` not `/schedule.html`).
 
 ## CSS Design Tokens
 
 All styling uses CSS custom properties in `styles/style.css`:
+
 ```css
---primary: #002169;      /* Navy - brand, headers */
+--primary: #002169;      /* Navy - brand, headers, .cta.active */
 --accent: #FFCD00;       /* Yellow - CTAs, .btn-primary */
---secondary: #334D87;    /* Body text */
---font-sans: 'Merriweather Sans'  /* Nav, buttons, body */
+--secondary: #334D87;    /* Body text, .gray aliases this */
+--font-sans: 'Merriweather Sans'  /* Nav, buttons, body text */
 ```
 
-**Never duplicate `:root`**—extend existing declarations only.
+**Never duplicate `:root`**—extend existing declarations.
 
-## Button Classes
-- `.btn-primary` — Yellow background, dark text (CTAs)
-- `.btn-secondary` — Outline style, primary border
-- `.cta` — Header CTA; add `.cta.active` on current page (inverts to navy/white)
+## Button & CTA Classes
 
-## JavaScript Patterns (index.html)
+| Class | Usage |
+|-------|-------|
+| `.btn-primary` | Yellow background, dark text (main CTAs) |
+| `.btn-secondary` | Outline style, primary border |
+| `.cta` | Header CTA; add `.cta.active` + `aria-current="page"` on current page (inverts to navy/white) |
 
-**Dynamic Calendar:** Renders in `#calendarGrid`. Future weekdays (Mon-Sat) get `.available` class and link to `/schedule`. Never hardcode dates.
+## JavaScript Patterns (`scripts/main.js`)
 
-**Testimonial Carousel:** Fetches `/assets/data/reviews.json`, creates cards dynamically using `textContent` (not innerHTML) to prevent XSS. Auto-rotates every 6 seconds with touch swipe support.
+All code runs inside an IIFE with `'use strict'`. Key modules:
 
-**Mobile Navigation:** `.mobile-menu-btn` toggles `.mobile-nav.active`. Both navs must mirror link order.
+- **`initCalendar()`**: Renders `#calendarGrid`. Future weekdays (Mon-Sat) get `.available`, link to `/schedule`. Never hardcode dates.
+- **`initTestimonialCarousel()`**: Fetches `/assets/data/reviews.json`, uses `textContent` (not innerHTML) to prevent XSS. Auto-rotates every 6s with touch swipe.
+- **`initMobileMenu()`**: `.mobile-menu-btn` toggles `.mobile-nav.active`. Both navs must mirror link order.
+- **`initJotFormLoading()`**: Adds `.loaded` class to `.jotform-loading` wrapper when iframe loads.
 
 ## Data: reviews.json
 
 ```json
 {
   "reviews": [{
-    "reviewer": "Jonathan",      // First name only
+    "reviewer": "Jonathan",
     "review_text": "...",
     "state": "New Hampshire",
-    "school_district": "Nashua School District",
     "job_title": "High School Mathematics Teacher",
+    "school_district": "Nashua School District",
     "time_posted": "4 months ago"
   }]
 }
 ```
-Include all fields—`state` and `job_title` display in carousel; `school_district` adds context.
 
-## URL & Linking Rules
+All fields required. Carousel displays: `job_title`, `state`. First name only for `reviewer`.
 
-`.htaccess` enforces clean URLs. Always link to `/schedule`, never `/schedule.html`. Trailing slashes are stripped.
+## URL & Navigation
 
-## Active State Pattern
-- Nav links: add `.active` or `aria-current="page"`
-- On schedule.html: CTA gets `.cta.active` + `aria-current="page"`
+`.htaccess` enforces clean URLs—always link to `/schedule`, never `/schedule.html`. Trailing slashes stripped. From subpages, link to homepage sections as `/#section-id`.
 
-## External Dependencies
+**Active states:**
+- Nav links: `.active` or `aria-current="page"`
+- Header CTA on schedule.html: `.cta.active` + `aria-current="page"`
 
-- Google Fonts: Merriweather, Merriweather Sans (preconnect required)
-- Font Awesome 6.4.0: CDN via cdnjs.cloudflare.com
-- JotForm: Embedded script from `form.jotform.com/jsform/251803846453157`
+## CSP & External Resources
 
-## CSP & Adding External Scripts
+`.htaccess` Content-Security-Policy whitelist:
 
-`.htaccess` enforces a strict Content-Security-Policy. To add new external resources:
-1. Identify the domain (e.g., `https://analytics.example.com`)
-2. Update the CSP header in `.htaccess` under the appropriate directive:
-   - `script-src` for JavaScript
-   - `connect-src` for fetch/XHR endpoints
-   - `img-src` for images/pixels
-3. Test locally—CSP violations appear in browser console
+| Directive | Allowed domains |
+|-----------|-----------------|
+| `script-src` | `'self'`, `form.jotform.com`, `cdn.jotfor.ms`, `js.jotform.com` |
+| `style-src` | `'self'`, `'unsafe-inline'`, `fonts.googleapis.com`, `cdnjs.cloudflare.com` |
+| `font-src` | `'self'`, `fonts.gstatic.com`, `cdnjs.cloudflare.com` |
+| `connect-src` | `'self'`, `api.jotform.com` |
+| `frame-src` | `form.jotform.com` |
 
-## Image Assets
+To add new external resources: update the CSP in `.htaccess`, test in browser console for violations.
 
-Current hero/section images are SVG placeholders. When adding real assets:
-- Place in `assets/img/`
-- Use descriptive filenames: `hero-educators.webp`, `pension-diagram.svg`
-- Prefer WebP for photos, SVG for icons/illustrations
-- Update `alt` text to be meaningful (not "placeholder")
-- Favicons: SVG primary (`favicon.svg`), with PNG/ICO fallbacks
+## Accessibility Requirements
 
-## Accessibility Patterns
-
-Maintain these conventions throughout:
-- Interactive elements: `aria-label` for icon-only buttons (calendar nav, carousel controls)
-- Current page: `aria-current="page"` on active nav links
-- Dynamic content: `aria-live="polite"` on carousel track for screen reader announcements
-- Keyboard navigation: `.available` calendar cells have `tabindex="0"` and `role="button"`
-- `<noscript>` fallbacks for calendar and JotForm embed
+- `aria-label` on icon-only buttons (calendar nav, carousel controls, mobile menu)
+- `aria-current="page"` on active nav links
+- `aria-live="polite"` on carousel track
+- `tabindex="0"` + `role="button"` on clickable calendar cells
+- `<noscript>` fallbacks for calendar and JotForm
 
 ## Brand Voice
 
-Friendly, trustworthy tone for K-12 educators. Key phrases:
-- "independent & conflict-free", "privacy first", "no products, no commissions"
+Friendly, trustworthy tone for K-12 educators:
+- Key phrases: "independent & conflict-free", "privacy first", "no products, no commissions"
 - CTAs: "Schedule an Appointment", "Learn About Your Pension"
