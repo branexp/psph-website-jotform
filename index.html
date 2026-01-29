@@ -544,6 +544,9 @@
       
       // Auto-rotate every 6 seconds
       startAutoRotate(totalSlides);
+      
+      // Add touch swipe support for mobile devices
+      addSwipeSupport(totalSlides);
     }
 
     function goToSlide(index) {
@@ -567,6 +570,45 @@
         currentSlide = (currentSlide + 1) % totalSlides;
         updateCarousel();
       }, 6000);
+    }
+
+    // Touch swipe support for mobile devices
+    function addSwipeSupport(totalSlides) {
+      const track = document.querySelector('.testimonial-track');
+      let startX = 0;
+      let isDragging = false;
+
+      track.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      });
+
+      track.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+      }, { passive: false });
+
+      track.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        // Swipe threshold of 50px
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            // Swipe left - next slide
+            currentSlide = (currentSlide + 1) % totalSlides;
+          } else {
+            // Swipe right - previous slide
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+          }
+          updateCarousel();
+          // Pause auto-rotation when user interacts
+          clearInterval(autoRotateInterval);
+        }
+      });
     }
 
     // Initialize on page load

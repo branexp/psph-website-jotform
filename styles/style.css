@@ -15,6 +15,7 @@
   --gray: #667AA5;
   --light-gray: #e9ecef;
   --white: #ffffff;
+  --background: #f5f7fa;
   --shadow: 0 4px 12px rgba(0, 33, 105, 0.08);
   --transition: all 0.3s ease;
   
@@ -27,7 +28,7 @@ body {
   font-family: var(--font-sans);
   line-height: 1.6;
   color: var(--secondary);
-  background-color: #f5f7fa;
+  background-color: var(--background);
 }
 
 .container {
@@ -668,6 +669,16 @@ p {
 
   .card-group {
     grid-template-columns: 1fr;
+  }
+
+  /* Carousel mobile improvements */
+  .carousel-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .testimonial-carousel {
+    gap: 0.5rem;
   }
 }
 
