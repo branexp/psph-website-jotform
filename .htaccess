@@ -30,5 +30,5 @@ RewriteRule ^(.+?)$ $1.html [L]
   Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
   Header set X-Content-Type-Options "nosniff"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' 'unsafe-inline'; connect-src 'self';"
+  Header set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com data:; script-src 'self' https://form.jotform.com https://cdn.jotfor.ms https://js.jotform.com; connect-src 'self' https://api.jotform.com; frame-src https://form.jotform.com;"
 </IfModule>

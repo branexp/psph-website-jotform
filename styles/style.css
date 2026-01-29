@@ -5,6 +5,16 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* Scroll offset for anchor targets */
+section[id] {
+  scroll-margin-top: 80px;
+}
+
 :root {
   --primary: #002169;
   --primary-light: #e6f0ff;
@@ -12,8 +22,8 @@
   --accent: #FFCD00;
   --light: #f8f9fa;
   --dark: #002169;
-  --gray: #667AA5;
-  --light-gray: #e9ecef;
+  --gray: #526391;
+  --light-gray: #d1d5db;
   --white: #ffffff;
   --background: #f5f7fa;
   --shadow: 0 4px 12px rgba(0, 33, 105, 0.08);
@@ -64,6 +74,15 @@ h3 {
 
 p {
   margin-bottom: 1rem;
+}
+
+a {
+  text-decoration: underline;
+  text-decoration-skip-ink: auto;
+}
+
+a:hover {
+  text-decoration: none;
 }
 
 /* Header */
@@ -326,6 +345,46 @@ p {
   margin-top: 1rem;
   color: var(--gray);
   font-size: 0.875rem;
+}
+
+/* Icon Placeholder - replaces image placeholders with FA icons */
+.icon-placeholder {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  background-color: var(--white);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: var(--shadow);
+  position: relative;
+}
+
+.icon-placeholder i {
+  font-size: 7rem;
+  color: var(--primary);
+}
+
+/* Stacked icon composition for hero */
+.icon-placeholder .icon-stack {
+  position: relative;
+  display: inline-block;
+}
+
+.icon-placeholder .icon-stack .icon-main {
+  font-size: 7rem;
+  color: var(--primary);
+}
+
+.icon-placeholder .icon-stack .icon-badge {
+  position: absolute;
+  bottom: -0.25rem;
+  right: -1rem;
+  font-size: 2.5rem;
+  color: var(--primary);
+  background: var(--white);
+  border-radius: 50%;
 }
 
 /* Quick Links */
@@ -597,26 +656,7 @@ p {
   transform: translateY(-2px);
 }
 
-/* Footer */
-.footer {
-  padding: 2rem 0;
-  background-color: var(--dark);
-  color: var(--white);
-  text-align: center;
-}
-
-.footer-disclaimer {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  max-width: 800px;
-  margin: 0 auto 1rem;
-  color: var(--light-gray);
-}
-
-.footer-copyright {
-  font-size: 0.8rem;
-  color: var(--light-gray);
-}
+/* Footer styles moved to end of file for organization */
 
 /* Responsive Design */
 @media (max-width: 992px) {
@@ -679,6 +719,25 @@ p {
 
   .testimonial-carousel {
     gap: 0.5rem;
+  }
+
+  /* Icon placeholder mobile sizing */
+  .icon-placeholder {
+    max-width: 280px;
+    height: 200px;
+  }
+
+  .icon-placeholder i {
+    font-size: 5rem;
+  }
+
+  .icon-placeholder .icon-stack .icon-main {
+    font-size: 5rem;
+  }
+
+  .icon-placeholder .icon-stack .icon-badge {
+    font-size: 1.75rem;
+    right: -0.75rem;
   }
 }
 
@@ -957,8 +1016,14 @@ p {
   }
 
   .calendar-cell {
-    padding: 4px;
+    padding: 8px;
     font-size: 0.875rem;
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .calendar-grid {
+    gap: 2px;
   }
 }
 
@@ -978,5 +1043,218 @@ p {
   color: var(--primary);
   font-size: 2rem;
   margin-bottom: 0;
+}
+
+/* Loading States */
+.loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.loading-spinner::before {
+  content: '';
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--light-gray);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-spinner-text {
+  color: var(--gray);
+  font-size: 0.9rem;
+}
+
+/* Skeleton loader for testimonials */
+.skeleton {
+  background: linear-gradient(90deg, var(--light-gray) 25%, var(--light) 50%, var(--light-gray) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.skeleton-card {
+  padding: 2rem;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.75rem;
+  width: 100%;
+}
+
+.skeleton-text:last-child {
+  width: 60%;
+}
+
+.skeleton-title {
+  height: 1.25rem;
+  width: 40%;
+  margin-bottom: 0.5rem;
+}
+
+/* JotForm loading overlay */
+.jotform-loading {
+  position: relative;
+  min-height: 400px;
+}
+
+.jotform-loading .loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.jotform-loading.loaded .loading-spinner {
+  display: none;
+}
+
+/* Footer Navigation */
+.footer {
+  padding: 3rem 0 2rem;
+  background-color: var(--dark);
+  color: var(--white);
+}
+
+.footer-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-nav-section h4 {
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.footer-nav-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-nav-section li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-nav-section a {
+  color: var(--light-gray);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.footer-nav-section a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  text-align: center;
+}
+
+.footer-disclaimer {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto 1rem;
+  color: var(--light-gray);
+}
+
+.footer-copyright {
+  font-size: 0.8rem;
+  color: var(--light-gray);
+}
+
+@media (max-width: 576px) {
+  .footer-nav {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb {
+  padding: 1rem 0;
+  background-color: var(--light);
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.breadcrumb-item a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.breadcrumb-item a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb-item.active {
+  color: var(--gray);
+}
+
+.breadcrumb-separator {
+  color: var(--gray);
+}
+
+/* Icon enhancements for steps and FAQs */
+.step-icon {
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+}
+
+.faq-item h3 i {
+  margin-right: 0.5rem;
+  color: var(--accent);
+}
+
+.btn i {
+  margin-right: 0.5rem;
+}
+
+.btn i.fa-arrow-right {
+  margin-right: 0;
+  margin-left: 0.5rem;
 }
 
