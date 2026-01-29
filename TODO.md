@@ -12,14 +12,12 @@
 **Location:** `assets/data/reviews.json`, testimonials carousel on index.html
 
 **Problem:**
-- Multiple testimonials mention "Rise North Capital" instead of "PSPH"
-- Services mentioned (401k rollovers, life insurance) don't match PSPH's pension-focused offering
+- One testimonial mentions "Rise North Capital" instead of "PSPH"
+- Services mentioned (401k/403b rollovers) don't match PSPH's pension-focused offering
 - Appears to be repurposed content from another company
 
-**Examples Found:**
-- "Cal from Rise North Capital has been incredibly helpful..."
-- "Thank you, Derek, and the team at Rise North Capital!"
-- "I have been very pleased with my experience with Rise North Capital..."
+**Example Found:**
+- "Cal from Rise North Capital has been incredibly helpful for me over the last year or so..." (Alex Gautieri testimonial)
 
 **Impact:**
 - Severely damages credibility and trustworthiness
@@ -27,7 +25,7 @@
 - Legal/trademark concerns using another company's testimonials
 
 **Action Required:**
-1. Remove or replace all testimonials mentioning "Rise North Capital"
+1. Remove or replace the testimonial mentioning "Rise North Capital"
 2. Source genuine PSPH testimonials from actual clients
 3. If PSPH is affiliated with Rise North Capital, add clear disclosure
 4. Update reviews.json with verified, accurate testimonials
@@ -163,7 +161,7 @@
 2. Calculate header height dynamically:
 ```javascript
 const headerHeight = document.querySelector('.header').offsetHeight;
-if (pageYOffset >= (sectionTop - headerHeight - 20)) {
+if (window.scrollY >= (sectionTop - headerHeight - 20)) {
   current = section.getAttribute('id');
 }
 ```
@@ -472,7 +470,7 @@ input:focus,
 
 ### 19. Hero Heading Responsive Size
 **Status:** 🟢 MEDIUM - Mobile UX  
-**Location:** UI_AUDIT_REPORT.md identifies this, `styles/style.css` line 257
+**Location:** UI_AUDIT_REPORT.md identifies this, `styles/style.css` line 256
 
 **Problem:**
 - Hero h1 at 2.8rem is too large on mobile screens
