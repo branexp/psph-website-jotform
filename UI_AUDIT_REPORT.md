@@ -63,9 +63,16 @@ This comprehensive UI audit evaluates the PSPH website across multiple dimension
    - **Severity:** Low
    - **Location:** index.html - Hero H1
    - **Issue:** Hero h1 is 2.8rem (44.8px) on mobile (375px width), which could be overwhelming
-   - **Current:** `h1 { font-size: 2.8rem; }` reduces to `2.2rem` only at 992px
-   - **Recommendation:** Add intermediate breakpoint at 576px with `h1 { font-size: 1.8rem; }`
+   - **Current:** `.hero h1 { font-size: 2.8rem; }` is more specific than the global `h1` rule inside `@media (max-width: 992px) { h1 { font-size: 2.2rem; } }`, so the hero heading remains 2.8rem across viewport widths instead of scaling down on smaller screens.
+   - **Recommendation:** Add a responsive override specifically for `.hero h1` at smaller breakpoints (for example, at 576px) such as:
 
+     ```css
+     @media (max-width: 576px) {
+       .hero h1 {
+         font-size: 1.8rem;
+       }
+     }
+     ```
 2. **Testimonial Text Length**
    - **Severity:** Low
    - **Issue:** Some testimonials are very long (200+ words), making them hard to scan
