@@ -30,9 +30,9 @@
   <!-- Header -->
   <header class="header">
     <div class="container">
-      <div class="brand">
-        <img src="/assets/img/psph-logo.svg" alt="PSPH" class="logo" />
-      </div>
+      <a href="/" class="brand">
+        <img src="/assets/img/psph-logo.svg" alt="PSPH - Return to homepage" class="logo" />
+      </a>
       <nav class="nav" aria-label="Primary">
         <a href="/index.html#how-it-works">How it works</a>
         <a href="/index.html#pension-basics">Pension Basics</a>
@@ -41,7 +41,7 @@
         <a href="/index.html#faqs">FAQs</a>
       </nav>
       <a href="schedule.html" class="cta active" aria-current="page">Schedule an Appointment</a>
-      <button class="mobile-menu-btn" aria-label="Toggle navigation">
+      <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
@@ -65,7 +65,6 @@
         <!-- Title and subtitle -->
         <div class="form-title-section">
           <h1 class="form-title">Welcome to the Appointment Center!</h1>
-          <p class="form-subtitle">In a complimentary one-on-one session, we'll cut through the complexity to give you the clarity and confidence you need.</p>
         </div>
 
         <!-- JotForm Embed -->
@@ -86,10 +85,10 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">PSPH</div>
-      </div>
-      <div class="footer-copyright">© PSPH. All rights reserved.</div>
+      <p class="footer-disclaimer">
+        Public School Pension Help (PSPH) helps public employees better understand their pension and retirement options by connecting them with qualified, independent service professionals. PSPH is a coordinating service and is not affiliated with any school district, union, or pension system.
+      </p>
+      <p class="footer-copyright">© 2026 Public School Pension Help. All rights reserved.</p>
     </div>
   </footer>
 
@@ -98,13 +97,17 @@
     document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
       document.querySelector('.mobile-nav').classList.toggle('active');
       this.classList.toggle('active');
+      const isExpanded = this.classList.contains('active');
+      this.setAttribute('aria-expanded', isExpanded);
     });
 
     // Close mobile menu when clicking a link
     document.querySelectorAll('.mobile-nav a').forEach(link => {
       link.addEventListener('click', () => {
         document.querySelector('.mobile-nav').classList.remove('active');
-        document.querySelector('.mobile-menu-btn').classList.remove('active');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        menuBtn.classList.remove('active');
+        menuBtn.setAttribute('aria-expanded', 'false');
       });
     });
   </script>

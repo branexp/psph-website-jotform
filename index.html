@@ -25,9 +25,9 @@
   <!-- Header -->
   <header class="header">
     <div class="container">
-      <div class="brand">
-        <img src="/assets/img/psph-logo.svg" alt="PSPH" class="logo" />
-      </div>
+      <a href="/" class="brand">
+        <img src="/assets/img/psph-logo.svg" alt="PSPH - Return to homepage" class="logo" />
+      </a>
       <nav class="nav" aria-label="Primary">
         <a href="#how-it-works" class="active">How it works</a>
         <a href="#pension-basics">Pension Basics</a>
@@ -36,7 +36,7 @@
         <a href="#faqs">FAQs</a>
       </nav>
       <a href="schedule.html" class="cta">Schedule an Appointment</a>
-      <button class="mobile-menu-btn" aria-label="Toggle navigation">
+      <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
         <span></span>
         <span></span>
         <span></span>
@@ -156,21 +156,29 @@
     </div>
   </section> -->
 
-  <!-- Testimonials -->
-  <section class="testimonials" id="testimonials">
+  <!-- Pension Basics Preview -->
+  <section class="pension-preview" id="pension-basics">
     <div class="container">
-      <h2>What educators say</h2>
-      <div class="testimonial-group">
-        <div class="testimonial-card">
-          <p class="testimonial-text">"I finally understand my options and feel confident about next steps."</p>
-          <p class="testimonial-role">5th Grade Teacher</p>
-        </div>
-        <div class="testimonial-card">
-          <p class="testimonial-text">"Clear, unbiased, and practical. Booking was easy."</p>
-          <p class="testimonial-role">High School Counselor</p>
+      <div class="pension-content">
+        <h2>Understanding Your Pension</h2>
+        <ul>
+          <li>Vesting and service credit basics</li>
+          <li>Changing employers or locations</li>
+          <li>Social Security offsets (WEP/GPO)</li>
+          <li>Buying time and retirement timing</li>
+        </ul>
+        <a href="schedule.html" class="btn btn-secondary">Explore Pension Basics</a>
+      </div>
+      <div class="pension-image">
+        <div class="image-placeholder">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <circle cx="50" cy="50" r="40" fill="#e6f2ff" />
+            <path d="M50 10 L75 50 L50 90 L25 50 Z" fill="#150070" opacity="0.7" />
+            <circle cx="50" cy="50" r="15" fill="#fff" />
+          </svg>
+          <p>Simple diagram of pension basics</p>
         </div>
       </div>
-      <a href="schedule.html" class="btn btn-secondary">Read More Educator Stories</a>
     </div>
   </section>
 
@@ -197,29 +205,23 @@
     </div>
   </section>
 
-  <!-- Pension Basics Preview -->
-  <section class="pension-preview" id="pension-basics">
+  <!-- Testimonials -->
+  <section class="testimonials" id="testimonials">
     <div class="container">
-      <div class="pension-content">
-        <h2>Understanding Your Pension</h2>
-        <ul>
-          <li>Vesting and service credit basics</li>
-          <li>Changing employers or locations</li>
-          <li>Social Security offsets (WEP/GPO)</li>
-          <li>Buying time and retirement timing</li>
-        </ul>
-        <a href="schedule.html" class="btn btn-secondary">Explore Pension Basics</a>
-      </div>
-      <div class="pension-image">
-        <div class="image-placeholder">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
-            <circle cx="50" cy="50" r="40" fill="#e6f2ff" />
-            <path d="M50 10 L75 50 L50 90 L25 50 Z" fill="#150070" opacity="0.7" />
-            <circle cx="50" cy="50" r="15" fill="#fff" />
-          </svg>
-          <p>Simple diagram of pension basics</p>
+      <h2>What educators say</h2>
+      <div class="testimonial-carousel">
+        <button class="carousel-btn carousel-prev" aria-label="Previous testimonial">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="testimonial-track">
+          <!-- Testimonials loaded dynamically from reviews.json -->
         </div>
+        <button class="carousel-btn carousel-next" aria-label="Next testimonial">
+          <i class="fas fa-chevron-right"></i>
+        </button>
       </div>
+      <div class="carousel-dots"></div>
+      <a href="schedule.html" class="btn btn-secondary">Schedule Your Session</a>
     </div>
   </section>
 
@@ -318,10 +320,10 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-content">
-        <div class="footer-brand">PSPH</div>
-      </div>
-      <div class="footer-copyright">© PSPH. All rights reserved.</div>
+      <p class="footer-disclaimer">
+        Public School Pension Help (PSPH) helps public employees better understand their pension and retirement options by connecting them with qualified, independent service professionals. PSPH is a coordinating service and is not affiliated with any school district, union, or pension system.
+      </p>
+      <p class="footer-copyright">© 2026 Public School Pension Help. All rights reserved.</p>
     </div>
   </footer>
 
@@ -330,6 +332,8 @@
     document.querySelector('.mobile-menu-btn').addEventListener('click', function () {
       document.querySelector('.mobile-nav').classList.toggle('active');
       this.classList.toggle('active');
+      const isExpanded = this.classList.contains('active');
+      this.setAttribute('aria-expanded', isExpanded);
     });
 
     // Active navigation highlighting
@@ -363,7 +367,9 @@
     document.querySelectorAll('.mobile-nav a').forEach(link => {
       link.addEventListener('click', () => {
         document.querySelector('.mobile-nav').classList.remove('active');
-        document.querySelector('.mobile-menu-btn').classList.remove('active');
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        menuBtn.classList.remove('active');
+        menuBtn.setAttribute('aria-expanded', 'false');
       });
     });
 
@@ -419,9 +425,9 @@
           cell.classList.add('today');
         }
         
-        // Mark weekdays (Mon-Fri) as available if they're in the future
+        // Mark weekdays (Mon-Sat) as available if they're in the future
         const dayOfWeek = cellDate.getDay();
-        if (cellDate > today && dayOfWeek >= 1 && dayOfWeek <= 5) {
+        if (cellDate > today && dayOfWeek >= 1 && dayOfWeek <= 6) {
           cell.classList.add('available');
           cell.setAttribute('tabindex', '0');
           cell.setAttribute('role', 'button');
@@ -458,6 +464,156 @@
     // Initialize calendar on page load
     if (document.getElementById('calendarGrid')) {
       renderCalendar();
+    }
+
+    // Testimonial Carousel
+    async function loadTestimonials() {
+      try {
+        const response = await fetch('/assets/data/reviews.json');
+        const data = await response.json();
+        
+        // Filter reviews with non-empty review_text
+        const reviews = data.reviews.filter(r => r.review_text && r.review_text.trim() !== '');
+        
+        if (reviews.length === 0) {
+          console.warn('No valid testimonials found');
+          return;
+        }
+        
+        const track = document.querySelector('.testimonial-track');
+        const dotsContainer = document.querySelector('.carousel-dots');
+        
+        reviews.forEach((review, index) => {
+          // Create testimonial card
+          const card = document.createElement('div');
+          card.className = 'testimonial-card';
+          
+          // Create elements safely using textContent to prevent XSS
+          const textP = document.createElement('p');
+          textP.className = 'testimonial-text';
+          textP.textContent = `"${review.review_text}"`;
+          
+          const authorP = document.createElement('p');
+          authorP.className = 'testimonial-author';
+          authorP.textContent = review.reviewer;
+          
+          const roleP = document.createElement('p');
+          roleP.className = 'testimonial-role';
+          roleP.textContent = `${review.job_title}, ${review.state}`;
+          
+          card.appendChild(textP);
+          card.appendChild(authorP);
+          card.appendChild(roleP);
+          track.appendChild(card);
+          
+          // Create dot indicator
+          const dot = document.createElement('button');
+          dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
+          dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
+          dot.addEventListener('click', () => goToSlide(index));
+          dotsContainer.appendChild(dot);
+        });
+        
+        // Add aria-live for accessibility
+        track.setAttribute('aria-live', 'polite');
+        track.setAttribute('aria-atomic', 'true');
+        
+        initCarousel(reviews.length);
+      } catch (error) {
+        console.error('Failed to load testimonials:', error);
+      }
+    }
+
+    let currentSlide = 0;
+    let autoRotateInterval;
+
+    function initCarousel(totalSlides) {
+      document.querySelector('.carousel-prev').addEventListener('click', () => {
+        currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+        updateCarousel();
+        // Pause auto-rotation when user interacts
+        clearInterval(autoRotateInterval);
+      });
+      
+      document.querySelector('.carousel-next').addEventListener('click', () => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+        // Pause auto-rotation when user interacts
+        clearInterval(autoRotateInterval);
+      });
+      
+      // Auto-rotate every 6 seconds
+      startAutoRotate(totalSlides);
+      
+      // Add touch swipe support for mobile devices
+      addSwipeSupport(totalSlides);
+    }
+
+    function goToSlide(index) {
+      currentSlide = index;
+      updateCarousel();
+      // Pause auto-rotation when user interacts
+      clearInterval(autoRotateInterval);
+    }
+
+    function updateCarousel() {
+      const track = document.querySelector('.testimonial-track');
+      track.style.transform = `translateX(-${currentSlide * 100}%)`;
+      
+      document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    function startAutoRotate(totalSlides) {
+      autoRotateInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % totalSlides;
+        updateCarousel();
+      }, 6000);
+    }
+
+    // Touch swipe support for mobile devices
+    function addSwipeSupport(totalSlides) {
+      const track = document.querySelector('.testimonial-track');
+      let startX = 0;
+      let isDragging = false;
+
+      track.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+        isDragging = true;
+      });
+
+      track.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+      }, { passive: false });
+
+      track.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const endX = e.changedTouches[0].clientX;
+        const diff = startX - endX;
+        
+        // Swipe threshold of 50px
+        if (Math.abs(diff) > 50) {
+          if (diff > 0) {
+            // Swipe left - next slide
+            currentSlide = (currentSlide + 1) % totalSlides;
+          } else {
+            // Swipe right - previous slide
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+          }
+          updateCarousel();
+          // Pause auto-rotation when user interacts
+          clearInterval(autoRotateInterval);
+        }
+      });
+    }
+
+    // Initialize on page load
+    if (document.querySelector('.testimonial-carousel')) {
+      loadTestimonials();
     }
 
   </script>
