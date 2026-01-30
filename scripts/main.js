@@ -7,7 +7,7 @@
   'use strict';
 
   // =====================
-  // Mobile Menu Toggle
+  // Mobile Menu Toggle with Backdrop
   // =====================
   function initMobileMenu() {
     const menuBtn = document.querySelector('.mobile-menu-btn');
@@ -15,20 +15,50 @@
 
     if (!menuBtn || !mobileNav) return;
 
-    menuBtn.addEventListener('click', function () {
-      mobileNav.classList.toggle('active');
-      this.classList.toggle('active');
-      const isExpanded = this.classList.contains('active');
-      this.setAttribute('aria-expanded', isExpanded);
-    });
+    // Create backdrop element
+    const backdrop = document.createElement('div');
+    backdrop.className = 'mobile-nav-backdrop';
+    document.body.appendChild(backdrop);
+
+    function openMenu() {
+      mobileNav.classList.add('active');
+      menuBtn.classList.add('active');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      backdrop.classList.add('active');
+      document.body.classList.add('menu-open');
+    }
+
+    function closeMenu() {
+      mobileNav.classList.remove('active');
+      menuBtn.classList.remove('active');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      backdrop.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    }
+
+    function toggleMenu() {
+      if (mobileNav.classList.contains('active')) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+
+    // Close menu when backdrop is clicked
+    backdrop.addEventListener('click', closeMenu);
 
     // Close mobile menu when clicking a link
     document.querySelectorAll('.mobile-nav a').forEach(link => {
-      link.addEventListener('click', () => {
-        mobileNav.classList.remove('active');
-        menuBtn.classList.remove('active');
-        menuBtn.setAttribute('aria-expanded', 'false');
-      });
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
+        closeMenu();
+      }
     });
   }
 
@@ -440,54 +470,10 @@
   }
 
   // =====================
-  // Mobile Menu with Backdrop Overlay
-  // =====================
-  function initMobileMenuBackdrop() {
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const mobileNav = document.querySelector('.mobile-nav');
-    
-    if (!menuBtn || !mobileNav) return;
-
-    // Create backdrop element
-    const backdrop = document.createElement('div');
-    backdrop.className = 'mobile-nav-backdrop';
-    document.body.appendChild(backdrop);
-
-    // Close menu when backdrop is clicked
-    backdrop.addEventListener('click', () => {
-      mobileNav.classList.remove('active');
-      menuBtn.classList.remove('active');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      backdrop.classList.remove('active');
-      document.body.classList.remove('menu-open');
-    });
-
-    // Modify existing menu toggle to also toggle backdrop
-    const originalClickHandler = menuBtn.onclick;
-    menuBtn.addEventListener('click', function() {
-      const isExpanded = mobileNav.classList.contains('active');
-      backdrop.classList.toggle('active', isExpanded);
-      document.body.classList.toggle('menu-open', isExpanded);
-    });
-
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-        mobileNav.classList.remove('active');
-        menuBtn.classList.remove('active');
-        menuBtn.setAttribute('aria-expanded', 'false');
-        backdrop.classList.remove('active');
-        document.body.classList.remove('menu-open');
-      }
-    });
-  }
-
-  // =====================
   // Initialize All
   // =====================
   function init() {
     initMobileMenu();
-    initMobileMenuBackdrop();
     initNavHighlighting();
     initCalendar();
     initTestimonialCarousel();
