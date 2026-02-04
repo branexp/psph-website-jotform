@@ -1,21 +1,12 @@
-/**
- * PSPH Website - Main JavaScript
- * Mobile navigation, calendar, and testimonial carousel functionality
- */
-
 (function () {
   'use strict';
 
-  // =====================
-  // Mobile Menu Toggle with Backdrop
-  // =====================
   function initMobileMenu() {
     const menuBtn = document.querySelector('.mobile-menu-btn');
     const mobileNav = document.querySelector('.mobile-nav');
 
     if (!menuBtn || !mobileNav) return;
 
-    // Create backdrop element
     const backdrop = document.createElement('div');
     backdrop.className = 'mobile-nav-backdrop';
     document.body.appendChild(backdrop);
@@ -46,15 +37,12 @@
 
     menuBtn.addEventListener('click', toggleMenu);
 
-    // Close menu when backdrop is clicked
     backdrop.addEventListener('click', closeMenu);
 
-    // Close mobile menu when clicking a link
     document.querySelectorAll('.mobile-nav a').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
 
-    // Close on Escape key
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
         closeMenu();
@@ -62,9 +50,6 @@
     });
   }
 
-  // =====================
-  // Active Navigation Highlighting
-  // =====================
   function initNavHighlighting() {
     const sections = document.querySelectorAll('section[id]');
     const navLinks = document.querySelectorAll('.nav a, .mobile-nav a');
@@ -94,9 +79,6 @@
     window.addEventListener('load', highlightNav);
   }
 
-  // =====================
-  // Dynamic Calendar
-  // =====================
   function initCalendar() {
     const calendarGrid = document.getElementById('calendarGrid');
     const currentMonthEl = document.getElementById('currentMonth');
@@ -113,7 +95,6 @@
     ];
 
     function renderCalendar() {
-      // Remove loading spinner if present
       const loadingSpinner = calendarGrid.parentElement.querySelector('.loading-spinner');
       if (loadingSpinner) {
         loadingSpinner.remove();
@@ -122,36 +103,30 @@
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth();
 
-      // Set month/year display
       if (currentMonthEl) {
         currentMonthEl.textContent = `${monthNames[month]} ${year}`;
       }
 
-      // Clear calendar
       calendarGrid.innerHTML = '';
 
-      // Add day headers
       const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       dayHeaders.forEach(day => {
         const header = document.createElement('div');
-        header.className = 'calendar-cell header';
+        header.className = 'calendar-cell calendar-header-cell';
         header.textContent = day;
         calendarGrid.appendChild(header);
       });
 
-      // Get first day of month and number of days
       const firstDay = new Date(year, month, 1).getDay();
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const today = new Date();
 
-      // Add empty cells for days before month starts
       for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement('div');
         emptyCell.className = 'calendar-cell';
         calendarGrid.appendChild(emptyCell);
       }
 
-      // Add days of month
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement('div');
         cell.className = 'calendar-cell';
@@ -159,12 +134,10 @@
 
         const cellDate = new Date(year, month, day);
 
-        // Mark today
         if (cellDate.toDateString() === today.toDateString()) {
           cell.classList.add('today');
         }
 
-        // Mark weekdays (Mon-Sat) as available if they're in the future
         const dayOfWeek = cellDate.getDay();
         if (cellDate > today && dayOfWeek >= 1 && dayOfWeek <= 6) {
           cell.classList.add('available');
@@ -189,7 +162,6 @@
       }
     }
 
-    // Calendar navigation
     if (prevMonthBtn) {
       prevMonthBtn.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
@@ -204,13 +176,9 @@
       });
     }
 
-    // Initialize
     renderCalendar();
   }
 
-  // =====================
-  // Testimonial Carousel
-  // =====================
   function initTestimonialCarousel() {
     const track = document.querySelector('.testimonial-track');
     const dotsContainer = document.querySelector('.carousel-dots');
@@ -223,7 +191,6 @@
     let autoRotateInterval;
     let totalSlides = 0;
 
-    // Show loading skeleton
     function showLoadingSkeleton() {
       track.innerHTML = `
         <div class="testimonial-card skeleton-card">
@@ -243,7 +210,6 @@
         const response = await fetch('/assets/data/reviews.json');
         const data = await response.json();
 
-        // Filter reviews with non-empty review_text
         const reviews = data.reviews.filter(r => r.review_text && r.review_text.trim() !== '');
 
         if (reviews.length === 0) {
@@ -254,16 +220,13 @@
 
         totalSlides = reviews.length;
 
-        // Clear loading skeleton
         track.innerHTML = '';
         if (dotsContainer) dotsContainer.innerHTML = '';
 
         reviews.forEach((review, index) => {
-          // Create testimonial card
           const card = document.createElement('div');
           card.className = 'testimonial-card';
 
-          // Create elements safely using textContent to prevent XSS
           const textP = document.createElement('p');
           textP.className = 'testimonial-text';
           textP.textContent = `"${review.review_text}"`;
@@ -281,7 +244,6 @@
           card.appendChild(roleP);
           track.appendChild(card);
 
-          // Create dot indicator
           if (dotsContainer) {
             const dot = document.createElement('button');
             dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
@@ -291,7 +253,6 @@
           }
         });
 
-        // Add aria-live for accessibility
         track.setAttribute('aria-live', 'polite');
         track.setAttribute('aria-atomic', 'true');
 
@@ -319,10 +280,8 @@
         });
       }
 
-      // Auto-rotate every 6 seconds
       startAutoRotate();
 
-      // Add touch swipe support
       addSwipeSupport();
     }
 
@@ -368,7 +327,6 @@
         const endX = e.changedTouches[0].clientX;
         const diff = startX - endX;
 
-        // Swipe threshold of 50px
         if (Math.abs(diff) > 50) {
           if (diff > 0) {
             currentSlide = (currentSlide + 1) % totalSlides;
@@ -381,158 +339,18 @@
       });
     }
 
-    // Initialize
     loadTestimonials();
   }
 
-  // =====================
-  // JotForm Loading State with Error Handling & Dynamic Height
-  // =====================
-  function initJotFormLoading() {
-    const formWrapper = document.querySelector('.jotform-loading');
-    if (!formWrapper) return;
 
-    const LOAD_TIMEOUT = 15000; // 15 seconds before showing error
-    const CHECK_INTERVAL = 100;
-    let loadAttempted = false;
-    let iframeFound = false;
 
-    // JotForm iframe auto-resize handler (official JotForm method)
-    // This listens for postMessage events from JotForm to resize the iframe
-    function handleJotFormMessage(event) {
-      // Verify the message is from JotForm
-      if (!event.origin.includes('jotform.com')) return;
-      
-      const iframe = formWrapper.querySelector('iframe');
-      if (!iframe) return;
-
-      // Parse the message data
-      let args;
-      if (typeof event.data === 'object') {
-        args = event.data;
-      } else if (typeof event.data === 'string') {
-        try {
-          args = JSON.parse(event.data);
-        } catch (e) {
-          // Try legacy format: "scrollHeight:1234"
-          const match = event.data.match(/scrollHeight:(\d+)/);
-          if (match) {
-            args = { scrollHeight: parseInt(match[1], 10) };
-          } else {
-            return;
-          }
-        }
-      } else {
-        return;
-      }
-
-      // Handle height change
-      if (args.scrollHeight) {
-        // Add buffer for mobile (extra padding for touch targets, etc.)
-        const isMobile = window.innerWidth <= 768;
-        const buffer = isMobile ? 100 : 50;
-        const newHeight = parseInt(args.scrollHeight, 10) + buffer;
-        
-        // Only increase height, don't shrink (prevents jumpiness)
-        const currentHeight = parseInt(iframe.style.height, 10) || 0;
-        if (newHeight > currentHeight || currentHeight === 0) {
-          iframe.style.height = newHeight + 'px';
-        }
-      }
-
-      // Handle scroll to top (when form pages change)
-      if (args.action === 'scrollIntoView' || args.action === 'scrollToTop') {
-        formWrapper.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-
-    // Listen for JotForm postMessage events
-    window.addEventListener('message', handleJotFormMessage, false);
-
-    // Create error message element (hidden initially)
-    const errorMessage = document.createElement('div');
-    errorMessage.className = 'jotform-error';
-    errorMessage.innerHTML = `
-      <div class="jotform-error-content">
-        <i class="fas fa-exclamation-triangle"></i>
-        <h3>Unable to Load Scheduling Form</h3>
-        <p>The form is taking longer than expected to load. This could be due to:</p>
-        <ul>
-          <li>Slow internet connection</li>
-          <li>Ad blocker or privacy extension interference</li>
-          <li>Temporary service disruption</li>
-        </ul>
-        <div class="jotform-error-actions">
-          <button class="btn btn-primary" onclick="location.reload()">
-            <i class="fas fa-redo"></i> Try Again
-          </button>
-          <a href="mailto:hello@psph.org?subject=Appointment%20Request" class="btn btn-secondary">
-            <i class="fas fa-envelope"></i> Email Us Instead
-          </a>
-        </div>
-      </div>
-    `;
-    errorMessage.style.display = 'none';
-    formWrapper.appendChild(errorMessage);
-
-    // Check for JotForm iframe periodically
-    const checkForIframe = setInterval(() => {
-      const iframe = formWrapper.querySelector('iframe');
-      if (iframe) {
-        iframeFound = true;
-        
-        // Listen for successful load
-        iframe.addEventListener('load', () => {
-          loadAttempted = true;
-          formWrapper.classList.add('loaded');
-          errorMessage.style.display = 'none';
-        });
-
-        // Fallback: assume loaded after 5 seconds if iframe exists
-        setTimeout(() => {
-          if (!loadAttempted) {
-            formWrapper.classList.add('loaded');
-          }
-        }, 5000);
-        
-        clearInterval(checkForIframe);
-      }
-    }, CHECK_INTERVAL);
-
-    // Timeout: show error if form doesn't load
-    setTimeout(() => {
-      clearInterval(checkForIframe);
-      
-      // Only show error if we haven't successfully loaded
-      if (!formWrapper.classList.contains('loaded')) {
-        // Hide loading spinner
-        const spinner = formWrapper.querySelector('.loading-spinner');
-        if (spinner) spinner.style.display = 'none';
-        
-        // If no iframe found at all, likely blocked
-        if (!iframeFound) {
-          errorMessage.querySelector('p').textContent = 
-            'The scheduling form could not be loaded. It may be blocked by your browser or an extension.';
-        }
-        
-        errorMessage.style.display = 'block';
-        formWrapper.classList.add('error');
-      }
-    }, LOAD_TIMEOUT);
-  }
-
-  // =====================
-  // Initialize All
-  // =====================
   function init() {
     initMobileMenu();
     initNavHighlighting();
     initCalendar();
     initTestimonialCarousel();
-    initJotFormLoading();
   }
 
-  // Run on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

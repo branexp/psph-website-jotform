@@ -6,13 +6,7 @@
   <meta name="description" content="Schedule your complimentary 30-minute pension consultation with PSPH. Get independent, conflict-free guidance tailored to K-12 educators' retirement planning needs.">
   <title>Schedule an Appointment</title>
 
-  <!-- Google Fonts - Optimized subset -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/assets/vendor/fontawesome/6.4.0/css/all.min.css?v=20260203">
 
   <link rel="icon" type="image/svg+xml" href="/assets/img/favicon.svg">
   <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96x96.png">
@@ -22,25 +16,23 @@
   <meta name="theme-color" content="#002169">
   <meta name="msapplication-TileColor" content="#002169">
 
-  <!-- Theme / page styles -->
-  <link rel="stylesheet" href="/styles/style.css" />
+  <link rel="stylesheet" href="/styles/style.css?v=20260204" />
 </head>
 <body>
 
-  <!-- Header -->
   <header class="header">
     <div class="container">
       <a href="/" class="brand">
         <img src="/assets/img/psph-logo-full.svg" alt="PSPH - Return to homepage" class="logo" />
       </a>
       <nav class="nav" aria-label="Primary">
-        <a href="/index.html#how-it-works">How it works</a>
-        <a href="/index.html#pension-basics">Pension Basics</a>
-        <a href="/index.html#about">About</a>
-        <a href="/index.html#testimonials">Stories</a>
-        <a href="/index.html#faqs">FAQs</a>
+        <a href="/#how-it-works">How it works</a>
+        <a href="/#pension-basics">Pension Basics</a>
+        <a href="/#about">About</a>
+        <a href="/#testimonials">Stories</a>
+        <a href="/#faqs">FAQs</a>
       </nav>
-      <a href="schedule.html" class="cta active" aria-current="page">Schedule an Appointment</a>
+      <a href="/schedule" class="cta active" aria-current="page">Schedule an Appointment</a>
       <button class="mobile-menu-btn" aria-label="Toggle navigation" aria-expanded="false">
         <span></span>
         <span></span>
@@ -49,17 +41,15 @@
     </div>
   </header>
 
-  <!-- Mobile Navigation -->
   <div class="mobile-nav">
-    <a href="/index.html#how-it-works">How it works</a>
-    <a href="/index.html#pension-basics">Pension Basics</a>
-    <a href="/index.html#about">About</a>
-    <a href="/index.html#testimonials">Stories</a>
-    <a href="/index.html#faqs">FAQs</a>
-    <a href="schedule.html" class="active" aria-current="page">Schedule an Appointment</a>
+    <a href="/#how-it-works">How it works</a>
+    <a href="/#pension-basics">Pension Basics</a>
+    <a href="/#about">About</a>
+    <a href="/#testimonials">Stories</a>
+    <a href="/#faqs">FAQs</a>
+    <a href="/schedule" class="active" aria-current="page">Schedule an Appointment</a>
   </div>
 
-  <!-- Breadcrumb -->
   <nav class="breadcrumb" aria-label="Breadcrumb">
     <div class="container">
       <ol class="breadcrumb-list">
@@ -73,20 +63,24 @@
   <main id="main" class="site-main" role="main">
     <div class="container">
       <div class="form-wrapper">
-        <!-- Title and subtitle -->
         <div class="form-title-section">
           <h1 class="form-title"><i class="fas fa-calendar-check"></i> Welcome to the Appointment Center!</h1>
         </div>
 
-        <!-- JotForm Embed with loading state -->
         <div class="jotform-loading">
-          <div class="loading-spinner">
-            <span class="loading-spinner-text">Loading scheduling form...</span>
+          <p class="schedule-alt-text">
+            If you are having trouble accessing the scheduling form, use one of the alternatives below.
+          </p>
+          <div class="btn-group schedule-alt-actions">
+            <a class="btn btn-secondary" href="https://form.jotform.com/251803846453157" target="_blank" rel="noopener">
+              <i class="fas fa-external-link-alt"></i> Open Scheduling Form
+            </a>
+            <a class="btn btn-secondary" href="mailto:hello@psph.org?subject=Appointment%20Request">
+              <i class="fas fa-envelope"></i> Email Us to Request an Appointment
+            </a>
           </div>
-          <script
-            type="text/javascript"
-            src="https://form.jotform.com/jsform/251803846453157"
-          ></script>
+
+          <script type="text/javascript" src="https://form.jotform.com/jsform/251803846453157"></script>
         </div>
 
         <noscript>
@@ -98,7 +92,6 @@
     </div>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="container">
       <nav class="footer-nav" aria-label="Footer navigation">
@@ -137,6 +130,6 @@
     </div>
   </footer>
 
-  <script src="/scripts/main.js" defer></script>
+  <script src="/scripts/schedule.js?v=20260204" defer></script>
 </body>
 </html>
