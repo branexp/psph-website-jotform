@@ -85,8 +85,16 @@ def remap_links(text: str) -> str:
 
 
 def strip_canonical(html: str) -> str:
+    """Drop canonical/og:url and add a robots meta tag.
+
+    The meta tag backs up the X-Robots-Tag header: mirror domains proxied
+    through Cloudflare reach visitors without the header even though the
+    origin sends it.
+    """
     html = re.sub(r'\n\s*<link rel="canonical"[^>]*>', "", html)
-    return re.sub(r'\n\s*<meta property="og:url"[^>]*>', "", html)
+    html = re.sub(r'\n\s*<meta name="robots"[^>]*>', "", html)
+    html = re.sub(r'\n\s*<meta property="og:url"[^>]*>', "", html)
+    return html.replace('<meta name="viewport"', '<meta name="robots" content="noindex,follow">\n  <meta name="viewport"', 1)
 
 
 def tracked_files():
@@ -120,6 +128,7 @@ def main(out_dir: str) -> None:
         text = page.read_text()
         assert '"/schedule' not in text, f"{page.name} still links to /schedule"
         assert 'rel="canonical"' not in text, f"{page.name} still has a canonical tag"
+        assert text.count('<meta name="robots" content="noindex,follow">') == 1, f"{page.name} lacks robots meta"
     assert "'/schedule'" not in (out / "scripts/main.js").read_text()
     print(f"mirror built in {out}")
 
