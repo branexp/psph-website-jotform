@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="t">
+  <title id="t">A school employee connected with a pension specialist</title>
+  <path d="M60 230h280" stroke="#d1d5db" stroke-width="6" stroke-linecap="round"/>
+  <g transform="translate(70 70)">
+    <path d="M0 40L60 10l60 30-60 30z" fill="#002169"/>
+    <path d="M24 54v30c0 10 72 10 72 0V54L60 72z" fill="#334D87"/>
+    <path d="M112 44v34" stroke="#FFCD00" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="112" cy="82" r="6" fill="#FFCD00"/>
+  </g>
+  <circle cx="110" cy="200" r="26" fill="#334D87"/>
+  <circle cx="290" cy="200" r="26" fill="#FFCD00"/>
+  <path d="M146 200h108" stroke="#002169" stroke-width="6" stroke-dasharray="4 12" stroke-linecap="round"/>
+  <g transform="translate(250 60)">
+    <rect width="90" height="110" rx="10" fill="#ffffff" stroke="#002169" stroke-width="6"/>
+    <rect x="18" y="22" width="54" height="8" rx="4" fill="#002169"/>
+    <rect x="18" y="42" width="54" height="8" rx="4" fill="#d1d5db"/>
+    <rect x="18" y="62" width="40" height="8" rx="4" fill="#d1d5db"/>
+    <circle cx="70" cy="88" r="12" fill="#FFCD00"/>
+  </g>
+</svg>

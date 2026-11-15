@@ -2,28 +2,31 @@
 
 ## Project Overview
 
-Static marketing website for **Public School Pension Help (PSPH)** — pension guidance for K-12 educators. No build process; files served directly via Apache on `https://psph.org`.
+Static marketing website for **Public School Pension Help (PSPH)** — free one-hour Zoom pension sessions for public school employees (K-12 and higher ed) in all 50 states. No build process; files served directly via Apache on `https://psph.org`.
 
 **Critical:** JotForm handles all form logic (form ID: `251803846453157`)—never add custom validation, PHP, or backend code.
 
 ## File Structure
 
 ```
-index.html              # Landing: hero, how-it-works, calendar, testimonials, FAQs
-schedule.html           # JotForm embed for appointment booking
+index.html              # Landing: hero, how-it-works timeline, booking calendar, FAQs, contact
+schedule.html           # JotForm embed for appointment booking (fallback links below the form)
+about.html              # About PSPH, including how PSPH is funded
+pension-basics.html     # Plain-language pension education (advisor fact-check before edits ship)
 privacy.html, terms.html # Legal pages with .legal-content section
+404.html                # Custom not-found page (ErrorDocument in .htaccess)
+sitemap.xml, robots.txt # Update sitemap.xml when adding or removing pages
 styles/style.css        # Single CSS file with design tokens in :root
-scripts/main.js         # IIFE module: mobile nav, calendar, carousel, JotForm loading
-assets/data/reviews.json # Testimonial data (first name, state, job_title, review_text)
-assets/img/             # SVG logos, favicons, placeholder graphics
-.htaccess               # Clean URLs, HTTPS enforcement, CSP headers
+scripts/main.js         # IIFE module used by every page: mobile nav, booking calendar, footer year
+assets/img/             # Logos, favicons, og-image.png, photos/ (free Unsplash license), illustrations/
+.htaccess               # Clean URLs, HTTPS enforcement, 404 page, cache headers
 ```
 
 ## Developer Workflow
 
 **Local testing:** Serve with any static server (e.g., `npx serve` or VS Code Live Server). Test CSP by checking browser console for violations.
 
-**Adding pages:** Copy header/footer structure from `privacy.html`. Update both `.nav` and `.mobile-nav` links to match. Use clean URL format in links (`/schedule` not `/schedule.html`).
+**Adding pages:** Copy header/footer structure from `about.html` (skip link, header with nested `.mobile-nav`, canonical + Open Graph tags). Update both `.nav` and `.mobile-nav` links to match, add the page to `sitemap.xml`, and use clean URLs in links (`/schedule` not `/schedule.html`). Bump the `?v=` query on CSS/JS links when those files change.
 
 ## CSS Design Tokens
 
@@ -50,27 +53,9 @@ All styling uses CSS custom properties in `styles/style.css`:
 
 All code runs inside an IIFE with `'use strict'`. Key modules:
 
-- **`initCalendar()`**: Renders `#calendarGrid`. Future weekdays (Mon-Sat) get `.available`, link to `/schedule`. Never hardcode dates.
-- **`initTestimonialCarousel()`**: Fetches `/assets/data/reviews.json`, uses `textContent` (not innerHTML) to prevent XSS. Auto-rotates every 6s with touch swipe.
-- **`initMobileMenu()`**: `.mobile-menu-btn` toggles `.mobile-nav.active`. Both navs must mirror link order.
-- **`initJotFormLoading()`**: Adds `.loaded` class to `.jotform-loading` wrapper when iframe loads.
-
-## Data: reviews.json
-
-```json
-{
-  "reviews": [{
-    "reviewer": "Jonathan",
-    "review_text": "...",
-    "state": "New Hampshire",
-    "job_title": "High School Mathematics Teacher",
-    "school_district": "Nashua School District",
-    "time_posted": "4 months ago"
-  }]
-}
-```
-
-All fields required. Carousel displays: `job_title`, `state`. First name only for `reviewer`.
+- **`initCalendar()`**: Renders `#calendarGrid`. Bookable days mirror the JotForm appointment field (`BOOKING` constant: Mon-Fri, 7 days' notice, 90 days ahead) and link to `/schedule`. Keep `BOOKING` in sync if the form's availability changes. Never hardcode dates.
+- **`initMobileMenu()`**: `.mobile-menu-btn` toggles `.mobile-nav.active` and its own `aria-expanded`/`aria-label`. Both navs must mirror link order.
+- **`initCurrentYear()`**: Fills `[data-current-year]` in the footer.
 
 ## URL & Navigation
 
@@ -78,11 +63,11 @@ All fields required. Carousel displays: `job_title`, `state`. First name only fo
 
 **Active states:**
 - Nav links: `.active` or `aria-current="page"`
-- Header CTA on schedule.html: `.cta.active` + `aria-current="page"`
+- Header CTA on schedule.html: `aria-current="page"`
 
 ## CSP & External Resources
 
-`.htaccess` Content-Security-Policy whitelist:
+CSP is intentionally **not** set in `.htaccess` (it broke JotForm embeds on school networks). If it is reintroduced, start from this allowlist:
 
 | Directive | Allowed domains |
 |-----------|-----------------|
@@ -96,14 +81,18 @@ To add new external resources: update the CSP in `.htaccess`, test in browser co
 
 ## Accessibility Requirements
 
-- `aria-label` on icon-only buttons (calendar nav, carousel controls, mobile menu)
+- `aria-label` on icon-only buttons (calendar nav, mobile menu)
 - `aria-current="page"` on active nav links
-- `aria-live="polite"` on carousel track
-- `tabindex="0"` + `role="button"` on clickable calendar cells
+- Bookable calendar days are real `<a>` links with descriptive `aria-label`s
+- Decorative `<i>` icons get `aria-hidden="true"`
 - `<noscript>` fallbacks for calendar and JotForm
+- Run axe-core on every page before shipping (no violations as of 2026-11)
 
-## Brand Voice
+## Brand Voice & Content Rules
 
-Friendly, trustworthy tone for K-12 educators:
-- Key phrases: "independent & conflict-free", "privacy first", "no products, no commissions"
-- CTAs: "Schedule an Appointment", "Learn About Your Pension"
+Friendly, trustworthy, plain-language tone for public school employees:
+- Facts to keep consistent everywhere: sessions are **free**, **one hour**, **on Zoom only**; clients get a **summary email** afterward; email replies **within 1 business day**; serving **all 50 states**.
+- Funding: PSPH is paid by the firms that employ the pension professionals it matches clients with. Do not claim "no commissions" or "conflict-free".
+- No phone number anywhere (the old 603 number was personal and is retired). Contact is hello@psph.org only.
+- Never publish: product or investment recommendations, promised outcomes, "fiduciary" claims, advisor/founder names or photos, or testimonials (removed 2026-11 pending compliance wording).
+- CTAs: "Book a Free Session", "Learn Pension Basics"
