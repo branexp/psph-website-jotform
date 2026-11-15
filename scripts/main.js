@@ -1,354 +1,190 @@
 (function () {
   'use strict';
 
+  // Booking rules mirror the JotForm appointment field (form 251803846453157):
+  // Monday-Friday only, at least 7 days' notice, up to 90 days ahead.
+  var BOOKING = {
+    weekdays: [1, 2, 3, 4, 5],
+    minNoticeDays: 7,
+    maxDaysAhead: 90
+  };
+
+  var MONTH_NAMES = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
   function initMobileMenu() {
-    const menuBtn = document.querySelector('.mobile-menu-btn');
-    const mobileNav = document.querySelector('.mobile-nav');
+    var menuBtn = document.querySelector('.mobile-menu-btn');
+    var mobileNav = document.querySelector('.mobile-nav');
 
     if (!menuBtn || !mobileNav) return;
 
-    const backdrop = document.createElement('div');
+    var backdrop = document.createElement('div');
     backdrop.className = 'mobile-nav-backdrop';
     document.body.appendChild(backdrop);
 
-    function openMenu() {
-      mobileNav.classList.add('active');
-      menuBtn.classList.add('active');
-      menuBtn.setAttribute('aria-expanded', 'true');
-      backdrop.classList.add('active');
-      document.body.classList.add('menu-open');
+    function setOpen(open) {
+      mobileNav.classList.toggle('active', open);
+      menuBtn.classList.toggle('active', open);
+      backdrop.classList.toggle('active', open);
+      document.body.classList.toggle('menu-open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
     }
 
-    function closeMenu() {
-      mobileNav.classList.remove('active');
-      menuBtn.classList.remove('active');
-      menuBtn.setAttribute('aria-expanded', 'false');
-      backdrop.classList.remove('active');
-      document.body.classList.remove('menu-open');
-    }
+    menuBtn.addEventListener('click', function () {
+      setOpen(!mobileNav.classList.contains('active'));
+    });
+    backdrop.addEventListener('click', function () { setOpen(false); });
 
-    function toggleMenu() {
-      if (mobileNav.classList.contains('active')) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    }
-
-    menuBtn.addEventListener('click', toggleMenu);
-
-    backdrop.addEventListener('click', closeMenu);
-
-    document.querySelectorAll('.mobile-nav a').forEach(link => {
-      link.addEventListener('click', closeMenu);
+    mobileNav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () { setOpen(false); });
     });
 
-    document.addEventListener('keydown', (e) => {
+    document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && mobileNav.classList.contains('active')) {
-        closeMenu();
+        setOpen(false);
+        menuBtn.focus();
       }
     });
   }
 
   function initNavHighlighting() {
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav a, .mobile-nav a');
+    var navLinks = document.querySelectorAll('.nav a[href^="#"], .mobile-nav a[href^="#"]');
+    if (navLinks.length === 0) return;
 
-    if (sections.length === 0 || navLinks.length === 0) return;
+    var sections = [];
+    navLinks.forEach(function (link) {
+      var section = document.getElementById(link.getAttribute('href').slice(1));
+      if (section && sections.indexOf(section) === -1) sections.push(section);
+    });
+    if (sections.length === 0) return;
 
     function highlightNav() {
-      let current = '';
-      const scrollPosition = window.scrollY;
-
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        if (scrollPosition >= (sectionTop - 100)) {
-          current = section.getAttribute('id');
-        }
+      var current = '';
+      sections.forEach(function (section) {
+        if (window.scrollY >= section.offsetTop - 100) current = section.id;
       });
-
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('href') === `#${current}`) {
-          link.classList.add('active');
-        }
+      navLinks.forEach(function (link) {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
       });
     }
 
-    window.addEventListener('scroll', highlightNav);
-    window.addEventListener('load', highlightNav);
+    window.addEventListener('scroll', highlightNav, { passive: true });
+    highlightNav();
+  }
+
+  function startOfDay(date) {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  }
+
+  function addDays(date, days) {
+    var d = new Date(date);
+    d.setDate(d.getDate() + days);
+    return d;
   }
 
   function initCalendar() {
-    const calendarGrid = document.getElementById('calendarGrid');
-    const currentMonthEl = document.getElementById('currentMonth');
-    const prevMonthBtn = document.getElementById('prevMonth');
-    const nextMonthBtn = document.getElementById('nextMonth');
+    var calendarGrid = document.getElementById('calendarGrid');
+    var currentMonthEl = document.getElementById('currentMonth');
+    var prevMonthBtn = document.getElementById('prevMonth');
+    var nextMonthBtn = document.getElementById('nextMonth');
 
     if (!calendarGrid) return;
 
-    let currentDate = new Date();
+    var today = startOfDay(new Date());
+    var firstBookable = addDays(today, BOOKING.minNoticeDays);
+    var lastBookable = addDays(today, BOOKING.maxDaysAhead);
+    var minMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+    var maxMonth = new Date(lastBookable.getFullYear(), lastBookable.getMonth(), 1);
 
-    const monthNames = [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ];
+    // Open on the month of the first bookable day.
+    var viewMonth = new Date(firstBookable.getFullYear(), firstBookable.getMonth(), 1);
 
-    function renderCalendar() {
-      const loadingSpinner = calendarGrid.parentElement.querySelector('.loading-spinner');
-      if (loadingSpinner) {
-        loadingSpinner.remove();
-      }
+    function isBookable(date) {
+      return date >= firstBookable &&
+        date <= lastBookable &&
+        BOOKING.weekdays.indexOf(date.getDay()) !== -1;
+    }
 
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth();
+    function render() {
+      var year = viewMonth.getFullYear();
+      var month = viewMonth.getMonth();
 
-      if (currentMonthEl) {
-        currentMonthEl.textContent = `${monthNames[month]} ${year}`;
-      }
+      if (currentMonthEl) currentMonthEl.textContent = MONTH_NAMES[month] + ' ' + year;
+      if (prevMonthBtn) prevMonthBtn.disabled = viewMonth <= minMonth;
+      if (nextMonthBtn) nextMonthBtn.disabled = viewMonth >= maxMonth;
 
       calendarGrid.innerHTML = '';
 
-      const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      dayHeaders.forEach(day => {
-        const header = document.createElement('div');
+      ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].forEach(function (day) {
+        var header = document.createElement('div');
         header.className = 'calendar-cell calendar-header-cell';
         header.textContent = day;
         calendarGrid.appendChild(header);
       });
 
-      const firstDay = new Date(year, month, 1).getDay();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-      const today = new Date();
+      var firstDay = new Date(year, month, 1).getDay();
+      var daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement('div');
-        emptyCell.className = 'calendar-cell';
-        calendarGrid.appendChild(emptyCell);
+      for (var i = 0; i < firstDay; i++) {
+        var empty = document.createElement('div');
+        empty.className = 'calendar-cell';
+        calendarGrid.appendChild(empty);
       }
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const cell = document.createElement('div');
-        cell.className = 'calendar-cell';
-        cell.textContent = day;
+      for (var day = 1; day <= daysInMonth; day++) {
+        var cellDate = new Date(year, month, day);
+        var cell;
 
-        const cellDate = new Date(year, month, day);
-
-        if (cellDate.toDateString() === today.toDateString()) {
-          cell.classList.add('today');
+        if (isBookable(cellDate)) {
+          cell = document.createElement('a');
+          cell.href = '/schedule';
+          cell.className = 'calendar-cell available';
+          cell.setAttribute('aria-label', 'Book a session on ' + MONTH_NAMES[month] + ' ' + day + ', ' + year);
+        } else {
+          cell = document.createElement('div');
+          cell.className = 'calendar-cell';
         }
 
-        const dayOfWeek = cellDate.getDay();
-        if (cellDate > today && dayOfWeek >= 1 && dayOfWeek <= 6) {
-          cell.classList.add('available');
-          cell.setAttribute('tabindex', '0');
-          cell.setAttribute('role', 'button');
-          cell.setAttribute('aria-label', `Schedule an appointment on ${monthNames[month]} ${day}, ${year}`);
-
-          const navigateToSchedule = () => {
-            window.location.href = '/schedule';
-          };
-
-          cell.addEventListener('click', navigateToSchedule);
-          cell.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-              event.preventDefault();
-              navigateToSchedule();
-            }
-          });
-        }
-
+        if (cellDate.getTime() === today.getTime()) cell.classList.add('today');
+        cell.textContent = String(day);
         calendarGrid.appendChild(cell);
       }
     }
 
     if (prevMonthBtn) {
-      prevMonthBtn.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() - 1);
-        renderCalendar();
+      prevMonthBtn.addEventListener('click', function () {
+        if (viewMonth <= minMonth) return;
+        viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() - 1, 1);
+        render();
       });
     }
 
     if (nextMonthBtn) {
-      nextMonthBtn.addEventListener('click', () => {
-        currentDate.setMonth(currentDate.getMonth() + 1);
-        renderCalendar();
+      nextMonthBtn.addEventListener('click', function () {
+        if (viewMonth >= maxMonth) return;
+        viewMonth = new Date(viewMonth.getFullYear(), viewMonth.getMonth() + 1, 1);
+        render();
       });
     }
 
-    renderCalendar();
+    render();
   }
 
-  function initTestimonialCarousel() {
-    const track = document.querySelector('.testimonial-track');
-    const dotsContainer = document.querySelector('.carousel-dots');
-    const prevBtn = document.querySelector('.carousel-prev');
-    const nextBtn = document.querySelector('.carousel-next');
-
-    if (!track) return;
-
-    let currentSlide = 0;
-    let autoRotateInterval;
-    let totalSlides = 0;
-
-    function showLoadingSkeleton() {
-      track.innerHTML = `
-        <div class="testimonial-card skeleton-card">
-          <div class="skeleton skeleton-text"></div>
-          <div class="skeleton skeleton-text"></div>
-          <div class="skeleton skeleton-text"></div>
-          <div class="skeleton skeleton-title"></div>
-          <div class="skeleton skeleton-text" style="width: 30%"></div>
-        </div>
-      `;
-    }
-
-    async function loadTestimonials() {
-      showLoadingSkeleton();
-
-      try {
-        const response = await fetch('/assets/data/reviews.json');
-        const data = await response.json();
-
-        const reviews = data.reviews.filter(r => r.review_text && r.review_text.trim() !== '');
-
-        if (reviews.length === 0) {
-          console.warn('No valid testimonials found');
-          track.innerHTML = '<p class="testimonial-text">No testimonials available at this time.</p>';
-          return;
-        }
-
-        totalSlides = reviews.length;
-
-        track.innerHTML = '';
-        if (dotsContainer) dotsContainer.innerHTML = '';
-
-        reviews.forEach((review, index) => {
-          const card = document.createElement('div');
-          card.className = 'testimonial-card';
-
-          const textP = document.createElement('p');
-          textP.className = 'testimonial-text';
-          textP.textContent = `"${review.review_text}"`;
-
-          const authorP = document.createElement('p');
-          authorP.className = 'testimonial-author';
-          authorP.textContent = review.reviewer;
-
-          const roleP = document.createElement('p');
-          roleP.className = 'testimonial-role';
-          roleP.textContent = `${review.job_title}, ${review.state}`;
-
-          card.appendChild(textP);
-          card.appendChild(authorP);
-          card.appendChild(roleP);
-          track.appendChild(card);
-
-          if (dotsContainer) {
-            const dot = document.createElement('button');
-            dot.className = 'carousel-dot' + (index === 0 ? ' active' : '');
-            dot.setAttribute('aria-label', `Go to testimonial ${index + 1}`);
-            dot.addEventListener('click', () => goToSlide(index));
-            dotsContainer.appendChild(dot);
-          }
-        });
-
-        track.setAttribute('aria-live', 'polite');
-        track.setAttribute('aria-atomic', 'true');
-
-        initCarouselControls();
-      } catch (error) {
-        console.error('Failed to load testimonials:', error);
-        track.innerHTML = '<p class="testimonial-text">Unable to load testimonials. Please try again later.</p>';
-      }
-    }
-
-    function initCarouselControls() {
-      if (prevBtn) {
-        prevBtn.addEventListener('click', () => {
-          currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-          updateCarousel();
-          clearInterval(autoRotateInterval);
-        });
-      }
-
-      if (nextBtn) {
-        nextBtn.addEventListener('click', () => {
-          currentSlide = (currentSlide + 1) % totalSlides;
-          updateCarousel();
-          clearInterval(autoRotateInterval);
-        });
-      }
-
-      startAutoRotate();
-
-      addSwipeSupport();
-    }
-
-    function goToSlide(index) {
-      currentSlide = index;
-      updateCarousel();
-      clearInterval(autoRotateInterval);
-    }
-
-    function updateCarousel() {
-      track.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-      document.querySelectorAll('.carousel-dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === currentSlide);
-      });
-    }
-
-    function startAutoRotate() {
-      autoRotateInterval = setInterval(() => {
-        currentSlide = (currentSlide + 1) % totalSlides;
-        updateCarousel();
-      }, 6000);
-    }
-
-    function addSwipeSupport() {
-      let startX = 0;
-      let isDragging = false;
-
-      track.addEventListener('touchstart', (e) => {
-        startX = e.touches[0].clientX;
-        isDragging = true;
-      });
-
-      track.addEventListener('touchmove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-      }, { passive: false });
-
-      track.addEventListener('touchend', (e) => {
-        if (!isDragging) return;
-        isDragging = false;
-
-        const endX = e.changedTouches[0].clientX;
-        const diff = startX - endX;
-
-        if (Math.abs(diff) > 50) {
-          if (diff > 0) {
-            currentSlide = (currentSlide + 1) % totalSlides;
-          } else {
-            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
-          }
-          updateCarousel();
-          clearInterval(autoRotateInterval);
-        }
-      });
-    }
-
-    loadTestimonials();
+  function initCurrentYear() {
+    var year = String(new Date().getFullYear());
+    document.querySelectorAll('[data-current-year]').forEach(function (el) {
+      el.textContent = year;
+    });
   }
-
-
 
   function init() {
     initMobileMenu();
     initNavHighlighting();
     initCalendar();
-    initTestimonialCarousel();
+    initCurrentYear();
   }
 
   if (document.readyState === 'loading') {

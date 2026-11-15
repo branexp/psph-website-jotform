@@ -346,241 +346,6 @@ a:hover {
   align-items: center;
 }
 
-.image-placeholder {
-  width: 100%;
-  max-width: 400px;
-  height: 300px;
-  background-color: var(--white);
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-  box-shadow: var(--shadow);
-}
-
-.image-placeholder p {
-  margin-top: 1rem;
-  color: var(--gray);
-  font-size: 0.875rem;
-}
-
-.icon-placeholder {
-  width: 100%;
-  max-width: 400px;
-  height: 300px;
-  background-color: var(--white);
-  border-radius: 8px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: var(--shadow);
-  position: relative;
-}
-
-.icon-placeholder i {
-  font-size: 7rem;
-  color: var(--primary);
-  line-height: 1;
-  display: block;
-}
-
-.icon-placeholder .icon-stack {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
-}
-
-.icon-placeholder .icon-stack .icon-main {
-  font-size: 7rem;
-  color: var(--primary);
-}
-
-.icon-placeholder .icon-stack .icon-badge {
-  position: absolute;
-  bottom: -0.25rem;
-  right: -1rem;
-  font-size: 2.5rem;
-  color: var(--primary);
-  background: var(--white);
-  border-radius: 50%;
-}
-
-.quick-links {
-  padding: 4rem 0;
-  background-color: var(--white);
-}
-
-.quick-links h2 {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.card-group {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-}
-
-.card {
-  background-color: var(--white);
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: var(--shadow);
-  transition: var(--transition);
-  text-decoration: none;
-  color: inherit;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
-.card h3 {
-  color: var(--primary);
-  margin-bottom: 0.5rem;
-}
-
-.card p {
-  color: var(--gray);
-}
-
-.testimonials {
-  padding: 4rem 0;
-  background-color: var(--light);
-  overflow-x: hidden; /* prevents stray off-canvas carousel text from showing */
-}
-
-.testimonials h2 {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.testimonial-carousel {
-  position: relative;
-  margin-bottom: 1.5rem;
-  overflow: hidden;
-  padding: 0 56px;
-}
-
-.testimonial-track {
-  display: flex;
-  transition: transform 0.5s ease;
-  width: 100%;
-}
-
-.testimonial-card {
-  flex: 0 0 100%;
-  background-color: var(--white);
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: var(--shadow);
-  text-align: center;
-  overflow: hidden;
-}
-
-.testimonial-text {
-  font-style: italic;
-  margin-bottom: 1.5rem;
-  color: var(--dark);
-  font-size: 1.1rem;
-  line-height: 1.7;
-  position: relative;
-  padding: 0 1rem;
-}
-
-.testimonial-text::before {
-  content: '"';
-  font-size: 3rem;
-  color: var(--accent);
-  position: absolute;
-  top: -0.5rem;
-  left: -0.5rem;
-  font-family: Georgia, serif;
-  line-height: 1;
-  opacity: 0.5;
-}
-
-.testimonial-author {
-  font-weight: 700;
-  color: var(--primary);
-  margin-bottom: 0.25rem;
-  font-size: 1rem;
-}
-
-.testimonial-role {
-  color: var(--gray);
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.testimonial-card .testimonial-author::before {
-  content: '';
-  display: block;
-  width: 40px;
-  height: 2px;
-  background-color: var(--accent);
-  margin: 0 auto 0.75rem;
-}
-
-.carousel-btn {
-  background: var(--primary);
-  color: var(--white);
-  border: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: var(--transition);
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
-
-.carousel-btn.carousel-prev {
-  left: 8px;
-}
-
-.carousel-btn.carousel-next {
-  right: 8px;
-}
-
-.carousel-btn:hover {
-  background: var(--secondary);
-}
-
-.carousel-dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.carousel-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: none;
-  background: var(--light-gray);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.carousel-dot.active {
-  background: var(--primary);
-}
-
-.testimonials .btn {
-  display: block;
-  width: fit-content;
-  margin: 0 auto;
-}
-
 .about-preview {
   padding: 4rem 0;
   background-color: var(--white);
@@ -765,28 +530,13 @@ a:hover {
     justify-content: center;
   }
 
-  .card-group {
-    grid-template-columns: 1fr;
-  }
-
-  /* Carousel buttons tend to cause layout issues on very small screens.
-     Swipe + dots still work, so hide them and let the content use full width. */
-  .carousel-btn {
-    display: none;
-  }
-
-  .testimonial-carousel {
-    padding: 0;
-  }
-
   .hero,
   .how-it-works,
   .pension-preview,
   .about-preview,
-  .testimonials,
   .faqs,
   .cta-section,
-  .quick-links {
+  .contact-us {
     padding: 2.5rem 0;
   }
 
@@ -794,24 +544,6 @@ a:hover {
   .about-preview .container,
   .pension-preview .container {
     gap: 1.5rem;
-  }
-
-  .icon-placeholder {
-    max-width: 260px;
-    height: 180px;
-  }
-
-  .icon-placeholder i {
-    font-size: 4.75rem;
-  }
-
-  .icon-placeholder .icon-stack .icon-main {
-    font-size: 4.75rem;
-  }
-
-  .icon-placeholder .icon-stack .icon-badge {
-    font-size: 1.6rem;
-    right: -0.6rem;
   }
 }
 
@@ -832,8 +564,10 @@ a:hover {
 }
 
 .process-steps {
+  list-style: none;
+  padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 2rem;
   margin-bottom: 3rem;
 }
@@ -937,7 +671,7 @@ a:hover {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 5px;
 }
 
@@ -1018,6 +752,8 @@ a:hover {
   justify-content: center;
   gap: 2rem;
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .contact-item {
@@ -1222,60 +958,6 @@ a:hover {
   font-size: 0.9rem;
 }
 
-.skeleton {
-  background: linear-gradient(90deg, var(--light-gray) 25%, var(--light) 50%, var(--light-gray) 75%);
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.5s ease-in-out infinite;
-  border-radius: 4px;
-}
-
-@keyframes skeleton-shimmer {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-.skeleton-card {
-  padding: 2rem;
-  background: var(--white);
-  border-radius: 8px;
-  box-shadow: var(--shadow);
-}
-
-.skeleton-text {
-  height: 1rem;
-  margin-bottom: 0.75rem;
-  width: 100%;
-}
-
-.skeleton-text:last-child {
-  width: 60%;
-}
-
-.skeleton-title {
-  height: 1.25rem;
-  width: 40%;
-  margin-bottom: 0.5rem;
-}
-
-.jotform-loading {
-  position: relative;
-  min-height: 400px;
-}
-
-.jotform-loading .loading-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 1;
-}
-
-.jotform-loading.loaded .loading-spinner {
-  display: none;
-}
-
-.jotform-loading iframe,
-.jotform-loading .jotform-form,
 .form-wrapper iframe {
   width: 100% !important;
   max-width: 100% !important;
@@ -1283,11 +965,6 @@ a:hover {
   border: none;
   height: auto;
   min-height: 600px;
-}
-
-.jotform-loading > *:not(.loading-spinner) {
-  max-width: 100%;
-  overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
@@ -1301,14 +978,6 @@ a:hover {
 
   .form-title {
     font-size: 1.5rem;
-  }
-
-  .jotform-loading {
-    min-height: 800px;
-  }
-
-  .jotform-loading iframe {
-    min-height: 1200px;
   }
 }
 
@@ -1324,14 +993,6 @@ a:hover {
   .form-title i {
     display: block;
     margin-bottom: 0.5rem;
-  }
-
-  .jotform-loading {
-    min-height: 1000px;
-  }
-
-  .jotform-loading iframe {
-    min-height: 1500px;
   }
 }
 
@@ -1433,7 +1094,7 @@ a:hover {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.footer-nav-section h4 {
+.footer-nav-section .footer-heading {
   color: var(--white);
   font-size: 1rem;
   font-weight: 600;
@@ -1573,67 +1234,239 @@ body.menu-open {
   z-index: 99;
 }
 
-.jotform-error {
-  text-align: center;
-  padding: 2rem;
-  background-color: var(--light);
-  border-radius: 8px;
-  border: 1px solid var(--light-gray);
-  margin: 1rem 0;
+
+/* ---------- 2026-11 refresh ---------- */
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  z-index: 200;
+  background: var(--accent);
+  color: var(--dark);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 700;
 }
 
-.jotform-error-content i {
-  font-size: 3rem;
-  color: #dc3545;
-  margin-bottom: 1rem;
+.skip-link:focus {
+  top: 1rem;
 }
 
-.jotform-error-content h3 {
-  color: var(--primary);
-  margin-bottom: 1rem;
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
 }
 
-.jotform-error-content p {
-  color: var(--gray);
-  margin-bottom: 1rem;
+.btn {
+  white-space: nowrap;
 }
 
-.jotform-error-content ul {
-  text-align: left;
-  max-width: 400px;
-  margin: 0 auto 1.5rem;
-  color: var(--gray);
-  padding-left: 1.5rem;
-}
-
-.jotform-error-content li {
-  margin-bottom: 0.5rem;
-}
-
-.jotform-error-actions {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
+.btn-group {
   flex-wrap: wrap;
 }
 
-.jotform-error-actions .btn {
-  min-width: 160px;
+.btn-group-center {
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.badge-group {
+  list-style: none;
+  padding: 0;
+}
+
+.photo-frame,
+.illustration {
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  background-color: var(--white);
+}
+
+.photo-frame img,
+.illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.illustration {
+  padding: 1.5rem;
+}
+
+.illustration-wide {
+  max-width: 420px;
+  margin: 0 auto 2rem;
+}
+
+.step-card {
+  padding-top: 2.5rem;
+}
+
+.calendar-note {
+  text-align: center;
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+a.calendar-cell.available {
+  text-decoration: none;
+}
+
+.calendar-header button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.noscript-text {
+  color: var(--secondary);
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.contact-details a {
+  overflow-wrap: anywhere;
+}
+
+/* Schedule page */
+.form-subtitle {
+  color: var(--gray);
+  margin-top: 0.5rem;
+}
+
+.schedule-alt {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+/* Content pages (About, Pension Basics, 404) */
+.content-page {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 0 3rem;
+}
+
+.content-page-center {
+  text-align: center;
+}
+
+.page-title {
+  color: var(--primary);
+  font-size: 2.4rem;
+}
+
+.page-lead {
+  font-size: 1.15rem;
+  color: var(--gray);
+  margin-bottom: 2rem;
+}
+
+.page-toc {
+  background-color: var(--white);
+  border-left: 4px solid var(--accent);
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow);
+}
+
+.page-toc-title {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.page-toc ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.content-section {
+  margin-bottom: 2.5rem;
+}
+
+.content-section h2 {
+  font-size: 1.6rem;
+  color: var(--primary);
+}
+
+.content-section p {
+  margin-bottom: 1rem;
+}
+
+.content-section ul {
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.content-section li {
+  margin-bottom: 0.4rem;
+}
+
+.content-callout {
+  background-color: var(--primary);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 3rem 0 2rem;
+}
+
+.content-callout h2 {
+  color: var(--white);
+  font-size: 1.5rem;
+}
+
+.content-callout p {
+  margin-bottom: 1.25rem;
+}
+
+.content-callout a:not(.btn) {
+  color: var(--accent);
+}
+
+.content-disclaimer {
+  font-size: 0.9rem;
+  color: var(--gray);
+  text-align: center;
+}
+
+@media (max-width: 992px) {
+  .pension-content ul {
+    display: inline-block;
+    text-align: left;
+  }
 }
 
 @media (max-width: 576px) {
-  .jotform-error-actions {
-    flex-direction: column;
-    align-items: center;
+  .btn {
+    white-space: normal;
   }
 
-  .jotform-error-actions .btn {
-    width: 100%;
-    max-width: 280px;
+  .calendar-section {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .calendar-container {
+    padding: 0.75rem;
+  }
+
+  .calendar-cell {
+    padding: 4px 0;
+    font-size: 0.8rem;
+  }
+
+  .page-title {
+    font-size: 1.9rem;
+  }
+
+  .illustration {
+    padding: 1rem;
   }
 }
-
-.jotform-loading.error .loading-spinner {
-  display: none;
-}
-

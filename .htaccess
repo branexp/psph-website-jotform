@@ -25,6 +25,9 @@ RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^(.+?)$ $1.html [L]
 
+# --- Custom 404 page ---
+ErrorDocument 404 /404.html
+
 # --- Headers ---
 <IfModule mod_headers.c>
   # Keep basic hardening that does not commonly break third-party embeds.
@@ -37,6 +40,10 @@ RewriteRule ^(.+?)$ $1.html [L]
   # Cache strategy (helps clients pick up changes quickly)
   <FilesMatch "\.(html?)$">
     Header set Cache-Control "no-cache, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  <FilesMatch "\.(jpe?g|png|svg|webp|ico)$">
+    Header set Cache-Control "public, max-age=604800"
   </FilesMatch>
 
   <FilesMatch "\.(css|js|woff2?|ttf)$">
