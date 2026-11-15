@@ -20,6 +20,7 @@ styles/style.css        # Single CSS file with design tokens in :root
 scripts/main.js         # IIFE module used by every page: mobile nav, booking calendar, footer year
 assets/img/             # Logos, favicons, og-image.png, photos/ (free Unsplash license), illustrations/
 .htaccess               # Clean URLs, HTTPS enforcement, 404 page, cache headers
+tools/build_mirror.py   # Builds the k12*.org campaign-mirror variant (not deployed to psph.org)
 ```
 
 ## Developer Workflow
@@ -27,6 +28,10 @@ assets/img/             # Logos, favicons, og-image.png, photos/ (free Unsplash 
 **Local testing:** Serve with any static server (e.g., `npx serve` or VS Code Live Server). Test CSP by checking browser console for violations.
 
 **Adding pages:** Copy header/footer structure from `about.html` (skip link, header with nested `.mobile-nav`, canonical + Open Graph tags). Update both `.nav` and `.mobile-nav` links to match, add the page to `sitemap.xml`, and use clean URLs in links (`/schedule` not `/schedule.html`). Bump the `?v=` query on CSS/JS links when those files change.
+
+## Campaign Mirrors (k12*.org)
+
+The ~59 `k12*.org` folders on the same hosting account serve a **mirror** of this site: the booking page is the homepage (`/`), the regular homepage is `/home`, `/schedule` 301s to `/`, and every response carries `X-Robots-Tag: noindex,follow` (no canonical, `og:url`, or sitemap). Never edit mirror files by hand: change this repo, then run `python3 tools/build_mirror.py OUTPUT_DIR` and deploy that output to every mirror. Any change to psph.org should be followed by a mirror rebuild and deploy so the two never drift.
 
 ## CSS Design Tokens
 
